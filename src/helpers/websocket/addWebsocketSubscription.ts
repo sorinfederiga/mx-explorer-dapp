@@ -1,11 +1,11 @@
 import { WebsocketSubcriptionsEnum } from 'types';
+import { hasWebsocketSubscription } from './hasWebsocketSubscription';
 
 export const addWebsocketSubscription = (
   arr: WebsocketSubcriptionsEnum[],
   subscription: WebsocketSubcriptionsEnum
 ) => {
-  const subscriptionIndex = arr.indexOf(subscription);
-  if (subscriptionIndex === -1) {
+  if (!hasWebsocketSubscription(arr, subscription)) {
     arr.push(subscription);
   }
 };

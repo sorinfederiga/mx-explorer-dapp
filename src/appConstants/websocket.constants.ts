@@ -16,11 +16,13 @@ export const websocketConnection: {
   instance: Socket | null;
   subscriptions: WebsocketSubcriptionsEnum[];
   activeSubscriptions: WebsocketSubcriptionsEnum[];
+  pendingSubscriptions: WebsocketSubcriptionsEnum[];
   // Use the connection status to avoid multiple websocket connections
   status: WebsocketConnectionStatusEnum;
 } = {
   instance: null,
   subscriptions: [],
   activeSubscriptions: [],
+  pendingSubscriptions: [],
   status: WebsocketConnectionStatusEnum.NOT_INITIALIZED
 };
