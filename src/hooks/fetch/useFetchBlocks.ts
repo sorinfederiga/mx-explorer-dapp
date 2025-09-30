@@ -18,8 +18,7 @@ export const useFetchBlocks = (props: Omit<FetchApiDataProps, 'onApiData'>) => {
   const { page, size } = useGetPage();
   const { dataCountPromise, filters, config } = props;
 
-  const { blocks, blocksCount, isDataReady, isWebsocket } =
-    useSelector(blocksSelector);
+  const { blocks, blocksCount, isDataReady } = useSelector(blocksSelector);
 
   const onWebsocketData = (event: BlocksWebsocketResponseType) => {
     if (!event) {
@@ -63,7 +62,7 @@ export const useFetchBlocks = (props: Omit<FetchApiDataProps, 'onApiData'>) => {
     config: { withProposerIdentity: true, ...config },
     onWebsocketData,
     onApiData,
-    isWebsocketUpdate: isWebsocket
+    urlParams: blockFilters
   });
 
   return {

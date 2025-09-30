@@ -68,7 +68,7 @@ export const useFetchTransactionsInPool = (
     },
     onWebsocketData,
     onApiData,
-    isWebsocketUpdate: isWebsocket
+    urlParams: transactionFilters
   });
 
   return {

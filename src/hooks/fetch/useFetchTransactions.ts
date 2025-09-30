@@ -24,7 +24,7 @@ export const useFetchTransactions = (props: FetchTransactionsProps) => {
 
   const { hasMaxTransactionsSize, dataCountPromise, filters } = props;
 
-  const { transactions, transactionsCount, isDataReady, isWebsocket } =
+  const { transactions, transactionsCount, isDataReady } =
     useSelector(transactionsSelector);
 
   const maxTransactionsSize =
@@ -72,7 +72,7 @@ export const useFetchTransactions = (props: FetchTransactionsProps) => {
     },
     onWebsocketData,
     onApiData,
-    isWebsocketUpdate: isWebsocket
+    urlParams: transactionFilters
   });
 
   return {

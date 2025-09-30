@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 
 import { websocketConnection } from 'appConstants';
+import { addWebsocketSubscription, removeWebsocketSubscription } from 'helpers';
 import { useInitWebsocket } from 'hooks/layout';
 import { WebsocketEventsEnum, WebsocketSubcriptionsEnum } from 'types';
 import { useHasWebsocketUrl } from './useHasWebsocketUrl';
@@ -10,33 +11,15 @@ export interface RegisterWebsocketListenerType {
   subscription?: WebsocketSubcriptionsEnum;
   event?: WebsocketEventsEnum;
   config?: Record<string, any>;
+  hasUrlParams?: boolean;
 }
-
-const addToSubscriptions = (
-  arr: WebsocketSubcriptionsEnum[],
-  subscription: WebsocketSubcriptionsEnum
-) => {
-  const subscriptionIndex = arr.indexOf(subscription);
-  if (subscriptionIndex === -1) {
-    arr.push(subscription);
-  }
-};
-
-const removeSubscription = (
-  arr: WebsocketSubcriptionsEnum[],
-  subscription: WebsocketSubcriptionsEnum
-) => {
-  const subscriptionIndex = arr.indexOf(subscription);
-  if (subscriptionIndex !== -1) {
-    arr.splice(subscriptionIndex, 1);
-  }
-};
 
 export function useRegisterWebsocketListener({
   subscription,
   event,
   config,
-  onEvent
+  onEvent,
+  hasUrlParams
 }: RegisterWebsocketListenerType) {
   const hasWebsocketUrl = useHasWebsocketUrl();
 
@@ -57,12 +40,15 @@ export function useRegisterWebsocketListener({
     const hasSubscription = subscriptionIndex !== -1;
     const hasActiveSubscription = activeSubscriptionIndex !== -1;
 
-    addToSubscriptions(websocketConnection.subscriptions, subscription);
-    addToSubscriptions(websocketConnection.activeSubscriptions, subscription);
-
-    if (!websocket || !websocket?.active) {
+    if (!websocket || !websocket?.active || hasUrlParams) {
       return;
     }
+
+    addWebsocketSubscription(websocketConnection.subscriptions, subscription);
+    addWebsocketSubscription(
+      websocketConnection.activeSubscriptions,
+      subscription
+    );
 
     if (!hasSubscription) {
       websocket.emit(subscription, websocketConfig, (response: any) => {
@@ -72,8 +58,11 @@ export function useRegisterWebsocketListener({
           response
         );
         if (response?.status !== 'success') {
-          removeSubscription(websocketConnection.subscriptions, subscription);
-          removeSubscription(
+          removeWebsocketSubscription(
+            websocketConnection.subscriptions,
+            subscription
+          );
+          removeWebsocketSubscription(
             websocketConnection.activeSubscriptions,
             subscription
           );
@@ -92,7 +81,17 @@ export function useRegisterWebsocketListener({
 
     return () => {
       websocket?.off(event);
-      removeSubscription(websocketConnection.activeSubscriptions, subscription);
+      removeWebsocketSubscription(
+        websocketConnection.activeSubscriptions,
+        subscription
+      );
     };
-  }, [websocketConnection, hasWebsocketUrl, event, subscription]);
+  }, [
+    websocketConnection,
+    hasWebsocketUrl,
+    event,
+    subscription,
+    onEvent,
+    hasUrlParams
+  ]);
 }
