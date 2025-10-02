@@ -242,6 +242,14 @@ export interface TransactionTokensType {
 
 // TRANSACTION UI
 
+export enum TransactionDirectionDisplayEnum {
+  out = 'Out',
+  in = 'In',
+  self = 'Self',
+  internal = 'Int',
+  inner = 'Inner Tx'
+}
+
 export enum TransferTypeEnum {
   Transaction = 'Transaction',
   SmartContractResult = 'SmartContractResult',
