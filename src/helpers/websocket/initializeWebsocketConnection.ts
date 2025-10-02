@@ -6,10 +6,13 @@ import {
   WEBSOCKET_RETRY_INTERVAL,
   WEBSOCKET_TIMEOUT,
   WebsocketConnectionStatusEnum,
-  websocketConnection
+  websocketActiveSubscriptions,
+  websocketConnection,
+  websocketPendingSubscriptions,
+  websocketSubscriptions
 } from 'appConstants';
 import { isUpdatesWebsocketInactive } from 'helpers';
-import { WebsocketEventsEnum } from 'types';
+import { WebsocketEventsEnum, WebsocketSubcriptionsEnum } from 'types';
 
 type TimeoutType = ReturnType<typeof setTimeout> | null;
 
@@ -21,6 +24,15 @@ export async function initializeWebsocketConnection(websocketUrl: string) {
   const updateSocketStatus = (status: WebsocketConnectionStatusEnum) => {
     websocketConnection.status = status;
     console.info('Websocket Status:', status);
+  };
+
+  const resetSubscriptions = () => {
+    websocketSubscriptions.clear();
+    websocketPendingSubscriptions.clear();
+    websocketActiveSubscriptions.clear();
+    Object.values(WebsocketSubcriptionsEnum).forEach(
+      (sub) => websocketConnection.instance?.off(sub)
+    );
   };
 
   const handleMessageReceived = (message: string) => {
@@ -38,6 +50,7 @@ export async function initializeWebsocketConnection(websocketUrl: string) {
       instance.off(WebsocketEventsEnum.connect);
       instance.off(WebsocketEventsEnum.connect_error);
       instance.off(WebsocketEventsEnum.disconnect);
+      resetSubscriptions();
       instance.close();
       console.info('Websocket Disconnected.');
     }
@@ -79,6 +92,8 @@ export async function initializeWebsocketConnection(websocketUrl: string) {
       WebsocketEventsEnum.connect_error,
       (error) => {
         console.warn('Websocket Connect Error:', error.message);
+        resetSubscriptions();
+        updateSocketStatus(WebsocketConnectionStatusEnum.PENDING);
       }
     );
 
@@ -86,6 +101,7 @@ export async function initializeWebsocketConnection(websocketUrl: string) {
       WebsocketEventsEnum.disconnect,
       (reason) => {
         console.info('Websocket Disconnected:', reason);
+        resetSubscriptions();
         updateSocketStatus(WebsocketConnectionStatusEnum.PENDING);
       }
     );

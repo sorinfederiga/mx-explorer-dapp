@@ -1,7 +1,10 @@
 import { useCallback, useState } from 'react';
 
-import { PAGE_SIZE, websocketConnection } from 'appConstants';
-import { removeWebsocketSubscription } from 'helpers';
+import {
+  PAGE_SIZE,
+  websocketActiveSubscriptions,
+  websocketConnection
+} from 'appConstants';
 import { useGetPage, useRegisterWebsocketListener } from 'hooks';
 import {
   ApiAdapterResponseType,
@@ -41,10 +44,6 @@ export const useFetchApiData = ({
   const hasUrlParams =
     Object.keys(urlParams).length > 0 || page !== 1 || size !== PAGE_SIZE;
 
-  const isActiveWebsocketSubscription =
-    subscription &&
-    websocketConnection.activeSubscriptions.includes(subscription);
-
   const onWebsocketEvent = useCallback(
     (event: any[]) => {
       if (hasUrlParams || !onWebsocketData) {
@@ -70,19 +69,11 @@ export const useFetchApiData = ({
         return;
       }
 
-      if (isActiveWebsocketSubscription && hasUrlParams) {
-        websocketConnection?.instance?.off(event);
-        removeWebsocketSubscription(
-          websocketConnection.activeSubscriptions,
-          subscription
-        );
-      }
-
-      if (
-        subscription &&
-        websocketConnection.activeSubscriptions.includes(subscription) &&
-        !paramsChange
-      ) {
+      if (subscription && websocketActiveSubscriptions.has(subscription)) {
+        if (hasUrlParams) {
+          websocketConnection?.instance?.off(event);
+          websocketActiveSubscriptions.delete(subscription);
+        }
         return;
       }
 
@@ -110,9 +101,9 @@ export const useFetchApiData = ({
     },
     [
       websocketConnection,
+      websocketActiveSubscriptions,
       subscription,
       hasUrlParams,
-      isActiveWebsocketSubscription,
       isCalled,
       onApiData
     ]

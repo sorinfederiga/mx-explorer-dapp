@@ -1,5 +1,4 @@
 import { Socket } from 'socket.io-client';
-import { WebsocketSubcriptionsEnum } from 'types';
 
 export enum WebsocketConnectionStatusEnum {
   NOT_INITIALIZED = 'not_initialized',
@@ -14,15 +13,13 @@ export const WEBSOCKET_MESSAGE_DELAY = 1000;
 
 export const websocketConnection: {
   instance: Socket | null;
-  subscriptions: WebsocketSubcriptionsEnum[];
-  activeSubscriptions: WebsocketSubcriptionsEnum[];
-  pendingSubscriptions: WebsocketSubcriptionsEnum[];
   // Use the connection status to avoid multiple websocket connections
   status: WebsocketConnectionStatusEnum;
 } = {
   instance: null,
-  subscriptions: [],
-  activeSubscriptions: [],
-  pendingSubscriptions: [],
   status: WebsocketConnectionStatusEnum.NOT_INITIALIZED
 };
+
+export const websocketSubscriptions = new Set();
+export const websocketPendingSubscriptions = new Set();
+export const websocketActiveSubscriptions = new Set();

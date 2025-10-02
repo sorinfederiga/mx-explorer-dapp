@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 
-import { websocketConnection } from 'appConstants';
 import {
-  addWebsocketSubscription,
-  hasWebsocketSubscription,
-  removeWebsocketSubscription
-} from 'helpers';
+  websocketConnection,
+  websocketActiveSubscriptions,
+  websocketPendingSubscriptions,
+  websocketSubscriptions,
+  WebsocketConnectionStatusEnum
+} from 'appConstants';
 import { useInitWebsocket } from 'hooks/layout';
 import { WebsocketEventsEnum, WebsocketSubcriptionsEnum } from 'types';
 import { useHasWebsocketUrl } from './useHasWebsocketUrl';
@@ -37,29 +38,25 @@ export function useRegisterWebsocketListener({
 
     const websocket = websocketConnection.instance;
 
-    const hasSubscription = hasWebsocketSubscription(
-      websocketConnection.subscriptions,
-      subscription
-    );
-    const hasPendingSubscription = hasWebsocketSubscription(
-      websocketConnection.pendingSubscriptions,
-      subscription
-    );
-    const hasActiveSubscription = hasWebsocketSubscription(
-      websocketConnection.activeSubscriptions,
-      subscription
-    );
+    const hasSubscription = websocketSubscriptions.has(subscription);
+    const hasPendingSubscription =
+      websocketPendingSubscriptions.has(subscription);
+    const hasActiveSubscription =
+      websocketActiveSubscriptions.has(subscription);
 
-    if (!websocket || !websocket?.active || hasUrlParams) {
+    if (
+      !websocket ||
+      !websocket?.active ||
+      hasUrlParams ||
+      websocketConnection.status !== WebsocketConnectionStatusEnum.COMPLETED
+    ) {
       return;
     }
 
-    addWebsocketSubscription(websocketConnection.subscriptions, subscription);
+    websocketSubscriptions.add(subscription);
+
     if (!hasActiveSubscription) {
-      addWebsocketSubscription(
-        websocketConnection.pendingSubscriptions,
-        subscription
-      );
+      websocketPendingSubscriptions.add(subscription);
     }
 
     if (!hasSubscription) {
@@ -70,14 +67,8 @@ export function useRegisterWebsocketListener({
           response
         );
         if (response?.status !== 'success') {
-          removeWebsocketSubscription(
-            websocketConnection.subscriptions,
-            subscription
-          );
-          removeWebsocketSubscription(
-            websocketConnection.pendingSubscriptions,
-            subscription
-          );
+          websocketSubscriptions.delete(subscription);
+          websocketPendingSubscriptions.delete(subscription);
         }
       });
     }
@@ -87,19 +78,9 @@ export function useRegisterWebsocketListener({
     }
 
     websocket.on(event, (response: any) => {
-      const hasPendingSubscription = hasWebsocketSubscription(
-        websocketConnection.pendingSubscriptions,
-        subscription
-      );
-      if (hasPendingSubscription) {
-        removeWebsocketSubscription(
-          websocketConnection.pendingSubscriptions,
-          subscription
-        );
-        addWebsocketSubscription(
-          websocketConnection.activeSubscriptions,
-          subscription
-        );
+      if (websocketPendingSubscriptions.has(subscription)) {
+        websocketPendingSubscriptions.delete(subscription);
+        websocketActiveSubscriptions.add(subscription);
       }
       console.info(`Client ${event}:`, response);
       onEvent(response);
@@ -107,10 +88,17 @@ export function useRegisterWebsocketListener({
 
     return () => {
       websocket?.off(event);
-      removeWebsocketSubscription(
-        websocketConnection.activeSubscriptions,
-        subscription
-      );
+      websocketActiveSubscriptions.delete(subscription);
     };
-  }, [websocketConnection, hasWebsocketUrl, event, subscription, hasUrlParams]);
+  }, [
+    websocketConnection,
+    websocketSubscriptions,
+    websocketActiveSubscriptions,
+    websocketPendingSubscriptions,
+    websocketConnection.status,
+    hasWebsocketUrl,
+    event,
+    subscription,
+    hasUrlParams
+  ]);
 }
