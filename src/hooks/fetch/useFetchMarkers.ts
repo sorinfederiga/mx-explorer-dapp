@@ -4,7 +4,7 @@ import { object, string, number } from 'yup';
 
 import { useAdapter } from 'hooks';
 import { markersSelector } from 'redux/selectors';
-import { setMarkers } from 'redux/slices/markers';
+import { setMarkers } from 'redux/slices';
 
 const schema = object({
   continent: string().defined(),

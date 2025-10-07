@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HeadersTokensType } from '../../types/headerStats.types';
+import { HeadersTokensType } from 'types';
 
 export const getInitialHeaderTokensStatsState = (): HeadersTokensType => {
   return {};
 };
 
-export const pageHeadersCollectionsStatsSlice = createSlice({
+export const pageHeadersTokensStatsSlice = createSlice({
   name: 'pageHeadersTokensStatsSlice',
   initialState: getInitialHeaderTokensStatsState(),
   reducers: {
@@ -30,7 +30,6 @@ export const pageHeadersCollectionsStatsSlice = createSlice({
 export const {
   setPageHeaderTokensStats,
   setPageHeaderBlocksStatsEcosystemMarketCap
-} = pageHeadersCollectionsStatsSlice.actions;
+} = pageHeadersTokensStatsSlice.actions;
 
-export const pageHeadersTokensReducer =
-  pageHeadersCollectionsStatsSlice.reducer;
+export const pageHeadersTokensReducer = pageHeadersTokensStatsSlice.reducer;

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useAdapter, useHasGrowthWidgets } from 'hooks';
 import { growthMostUsedSelector } from 'redux/selectors';
-import { setGrowthMostUsed } from 'redux/slices/growthMostUsed';
+import { setGrowthMostUsed } from 'redux/slices';
 
 export const useFetchGrowthMostUsed = () => {
   const hasGrowthWidgets = useHasGrowthWidgets();

@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useAdapter, useHasGrowthWidgets } from 'hooks';
 import { statsSelector } from 'redux/selectors';
-import { pageHeadersBlocksStatsSelector } from 'redux/selectors/pageHeadersBlocksStats';
+import { pageHeadersBlocksStatsSelector } from 'redux/selectors';
 import {
   setPageHeaderBlocksStats,
   setPageHeaderBlocksStatsBlockHeight
-} from 'redux/slices/pageHeadersBlocksStats';
+} from 'redux/slices';
 import { HeadersBlocksType } from 'types/headerStats.types';
 
 export const useHeadersBlocksStats = () => {

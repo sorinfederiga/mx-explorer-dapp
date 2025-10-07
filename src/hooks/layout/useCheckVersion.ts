@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 import { NEW_VERSION_NOTIFICATION } from 'appConstants';
 import { useNotifications } from 'hooks';
-import { refreshSelector } from 'redux/selectors/refresh';
+import { refreshSelector } from 'redux/selectors';
 
 export const useCheckVersion = () => {
   const { timestamp } = useSelector(refreshSelector);

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { processGrowthTransactions } from 'helpers';
 import { useAdapter, useHasGrowthWidgets } from 'hooks';
 import { growthTransactionsSelector } from 'redux/selectors';
-import { setGrowthTransactions } from 'redux/slices/growthTransactions';
+import { setGrowthTransactions } from 'redux/slices';
 
 export const useFetchGrowthTransactions = () => {
   const hasGrowthWidgets = useHasGrowthWidgets();

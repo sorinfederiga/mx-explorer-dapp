@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { ELLIPSIS } from 'appConstants';
 import { statsSelector } from 'redux/selectors';
-import { pageHeadersBlocksStatsSelector } from 'redux/selectors/pageHeadersBlocksStats';
+import { pageHeadersBlocksStatsSelector } from 'redux/selectors';
 import { StatsCard } from 'widgets';
 
 export const BlockHeightStatsCard = () => {

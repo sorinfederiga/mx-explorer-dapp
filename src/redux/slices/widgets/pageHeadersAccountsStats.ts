@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { HeadersAccountsType } from '../../types/headerStats.types';
+import { HeadersAccountsType } from 'types';
 
 export const getInitialHeaderAccountsStatsState = (): HeadersAccountsType => {
   return {};

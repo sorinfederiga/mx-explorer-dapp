@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { processGrowthStaking } from 'helpers';
 import { useAdapter, useHasGrowthWidgets } from 'hooks';
 import { growthStakingSelector } from 'redux/selectors';
-import { setGrowthStaking } from 'redux/slices/growthStaking';
+import { setGrowthStaking } from 'redux/slices';
 
 export const useFetchGrowthStaking = () => {
   const hasGrowthWidgets = useHasGrowthWidgets();

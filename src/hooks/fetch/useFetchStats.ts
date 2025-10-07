@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useAdapter, useRegisterWebsocketListener } from 'hooks';
 import { statsSelector } from 'redux/selectors';
-import { setStats } from 'redux/slices/stats';
+import { setStats } from 'redux/slices';
 import {
   StatsType,
   WebsocketEventsEnum,

@@ -1,11 +1,11 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../store';
+import { RootState } from '../../store';
 
 const stateSelector = (state: RootState) => {
-  return state.accountStaking;
+  return state.nodesIdentities;
 };
 
-export const accountStakingSelector = createSelector(
+export const nodesIdentitiesSelector = createSelector(
   stateSelector,
   (state) => state
 );

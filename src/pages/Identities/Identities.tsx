@@ -14,7 +14,7 @@ import {
   stakeSelector,
   stakeExtraSelector
 } from 'redux/selectors';
-import { setStakeExtra } from 'redux/slices/stakeExtra';
+import { setStakeExtra } from 'redux/slices';
 import { SortOrderEnum } from 'types';
 
 import { IdentityRow, ResiliencyRow } from './components';

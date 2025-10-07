@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { processGrowthSearch } from 'helpers';
 import { useAdapter, useHasGrowthWidgets } from 'hooks';
 import { growthSearchSelector } from 'redux/selectors';
-import { setGrowthSearch } from 'redux/slices/growthSearch';
+import { setGrowthSearch } from 'redux/slices';
 
 export const useFetchGrowthSearch = () => {
   const hasGrowthWidgets = useHasGrowthWidgets();

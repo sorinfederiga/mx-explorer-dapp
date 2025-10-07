@@ -3,8 +3,8 @@ import BigNumber from 'bignumber.js';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useAdapter, useHasGrowthWidgets } from 'hooks';
-import { pageHeadersAccountsStatsSelector } from 'redux/selectors/pageHeadersAccountsStats';
-import { setPageHeaderAccountsStats } from 'redux/slices/pageHeadersAccountsStats';
+import { pageHeadersAccountsStatsSelector } from 'redux/selectors';
+import { setPageHeaderAccountsStats } from 'redux/slices';
 import { HeadersAccountsType } from 'types/headerStats.types';
 
 export const useHeaderAccountsStats = () => {

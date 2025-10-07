@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 
 import { processEconomics } from 'helpers';
 import { useAdapter } from 'hooks';
-import { setEconomics } from 'redux/slices/economics';
+import { setEconomics } from 'redux/slices';
 
 let currentRequest: any = null;
 

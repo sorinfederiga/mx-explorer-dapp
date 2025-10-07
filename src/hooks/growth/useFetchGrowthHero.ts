@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { processGrowthHero } from 'helpers';
 import { useAdapter, useHasGrowthWidgets } from 'hooks';
 import { growthHeroSelector } from 'redux/selectors';
-import { setGrowthHero } from 'redux/slices/growthHero';
+import { setGrowthHero } from 'redux/slices';
 
 let currentRequest: any = null;
 

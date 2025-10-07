@@ -12,7 +12,7 @@ import {
   refreshSelector,
   statsSelector
 } from 'redux/selectors';
-import { triggerRefresh } from 'redux/slices/refresh';
+import { triggerRefresh } from 'redux/slices';
 
 export const useLoopManager = () => {
   const intervalRef = useRef<any>(null);

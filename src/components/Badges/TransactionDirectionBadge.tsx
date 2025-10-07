@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { isTouchDevice } from 'helpers';
 import { interfaceSelector } from 'redux/selectors';
-import { setHighlightedText } from 'redux/slices/interface';
+import { setHighlightedText } from 'redux/slices';
 import {
   TransactionDirectionDisplayEnum,
   TransactionDirectionEnum,

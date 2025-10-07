@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { processNodesVersions } from 'helpers';
 import { useAdapter } from 'hooks';
 import { nodesVersionsSelector } from 'redux/selectors';
-import { setNodesVersions } from 'redux/slices/nodesVersions';
+import { setNodesVersions } from 'redux/slices';
 
 let currentRequest: any = null;
 

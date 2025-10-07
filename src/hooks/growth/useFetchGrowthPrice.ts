@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { processGrowthPrice } from 'helpers';
 import { useAdapter, useHasGrowthWidgets } from 'hooks';
 import { growthPriceSelector } from 'redux/selectors';
-import { setGrowthPrice } from 'redux/slices/growthPrice';
+import { setGrowthPrice } from 'redux/slices';
 
 export const useFetchGrowthPrice = () => {
   const hasGrowthWidgets = useHasGrowthWidgets();

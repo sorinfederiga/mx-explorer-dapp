@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { processGrowthEconomics } from 'helpers';
 import { useAdapter, useHasGrowthWidgets } from 'hooks';
 import { growthEconomicsSelector } from 'redux/selectors';
-import { setGrowthEconomics } from 'redux/slices/growthEconomics';
+import { setGrowthEconomics } from 'redux/slices';
 
 let currentRequest: any = null;
 

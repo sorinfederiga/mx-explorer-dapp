@@ -1,11 +1,11 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../store';
+import { RootState } from '../../store';
 
 const stateSelector = (state: RootState) => {
-  return state.growthSearch;
+  return state.nodesOverview;
 };
 
-export const growthSearchSelector = createSelector(
+export const nodesOverviewSelector = createSelector(
   stateSelector,
   (state) => state
 );
