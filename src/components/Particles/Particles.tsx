@@ -70,7 +70,7 @@ function CameraControls() {
 
 function isExcluded() {
   const browser = UAParser();
-  const excludedOS = ['ubuntu', 'linux'];
+  const excludedOS = ['ubuntu', 'linux', 'debian', 'fedora'];
   const isExcludedOS = excludedOS.includes(
     browser?.os?.name ? browser.os.name?.replaceAll(' ', '-').toLowerCase() : ''
   );
@@ -199,8 +199,7 @@ export const Particles = memo(() => {
     };
   }, []);
 
-  // const skipAnimation = isExcluded() || !isWebGLReady;
-  const skipAnimation = true; // todo remove when linux issues fixed
+  const skipAnimation = isExcluded() || !isWebGLReady;
 
   return (
     <div
