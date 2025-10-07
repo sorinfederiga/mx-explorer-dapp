@@ -49,8 +49,6 @@ export const useFetchApiData = ({
 
   const onWebsocketEvent = useCallback(
     (event: any[]) => {
-      console.log('---hasUrlParams', hasUrlParams);
-      console.log('---isRefreshPaused', isRefreshPaused);
       if (isPaused || !onWebsocketData) {
         return;
       }
