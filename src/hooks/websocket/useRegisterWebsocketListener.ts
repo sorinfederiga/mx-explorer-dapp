@@ -86,7 +86,7 @@ export function useRegisterWebsocketListener({
         websocketPendingSubscriptions.delete(subscription);
         websocketActiveSubscriptions.add(subscription);
       }
-      console.info(`Client ${event}:`, response);
+      // console.info(`Client ${event}:`, response);
       onWebsocketEvent(response);
     });
 
