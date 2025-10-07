@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { REFRESH_RATE } from 'appConstants';
 import { networks } from 'config';
 import { getUrlNetwork } from 'helpers';
 import { NetworkAdapterEnum, NetworkType } from 'types';
@@ -13,6 +14,7 @@ export const emptyNetwork: NetworkType = {
   walletAddress: '',
   explorerAddress: '',
   apiAddress: '',
+  refreshRate: REFRESH_RATE,
   accessToken: false
 };
 
@@ -32,8 +34,8 @@ export const getInitialState = (): CurrentNetworkSliceType => {
   const defaultNetwork = defaultNetworkInList ?? emptyNetwork;
 
   return {
-    defaultNetwork,
-    activeNetwork: baseNetwork
+    defaultNetwork: { refreshRate: REFRESH_RATE, ...defaultNetwork },
+    activeNetwork: { refreshRate: REFRESH_RATE, ...baseNetwork }
   };
 };
 
@@ -46,6 +48,7 @@ export const networksSlice = createSlice({
       action: PayloadAction<NetworkType>
     ) => {
       state.activeNetwork = {
+        refreshRate: REFRESH_RATE,
         ...action.payload
       };
     }

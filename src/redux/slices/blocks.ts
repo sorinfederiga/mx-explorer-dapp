@@ -7,6 +7,7 @@ export const getInitialBlocksState = (): BlocksSliceType => {
     blocks: [],
     blocksCount: ELLIPSIS,
     isDataReady: undefined,
+    isRefreshPaused: false,
     isWebsocket: false
   };
 };
@@ -33,10 +34,16 @@ export const blocksSlice = createSlice({
 
       state.isDataReady = action.payload.isDataReady;
       state.isWebsocket = action.payload.isWebsocket;
+    },
+    pauseRefresh: (state: BlocksSliceType) => {
+      state.isRefreshPaused = true;
+    },
+    resumeRefresh: (state: BlocksSliceType) => {
+      state.isRefreshPaused = false;
     }
   }
 });
 
-export const { setBlocks } = blocksSlice.actions;
+export const { setBlocks, pauseRefresh, resumeRefresh } = blocksSlice.actions;
 
 export const blocksReducer = blocksSlice.reducer;
