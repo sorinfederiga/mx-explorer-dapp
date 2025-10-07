@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import classNames from 'classnames';
 
 import { ELLIPSIS } from 'appConstants';
 import { ProgressRing } from 'components';
@@ -11,9 +12,10 @@ export const EpochHeroPill = ({ className }: WithClassnameType) => {
 
   return (
     <div
-      className={`hero-pill epoch-hero-pill d-flex align-items-center justify-content-between font-headings ${
-        className ?? ''
-      }`}
+      className={classNames(
+        'hero-pill epoch-hero-pill d-flex align-items-center justify-content-between font-headings',
+        className
+      )}
     >
       <div className='d-flex flex-column lext-left me-3'>
         <div className='label' data-testid='currentEpoch'>

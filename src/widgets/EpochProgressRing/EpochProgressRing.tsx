@@ -18,7 +18,7 @@ export const EpochProgressRing = ({
     useFetchEpochProgress();
 
   return (
-    <div className={`epoch-progress-ring ${className ?? ''}`}>
+    <div className={classNames('epoch-progress-ring', className)}>
       <ProgressRing progress={epochPercentage} size={140} hasBg>
         <div className='label' data-testid='currentEpoch'>
           {isReady && epoch !== undefined ? (

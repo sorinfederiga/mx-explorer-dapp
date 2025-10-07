@@ -73,14 +73,14 @@ export const useFetchApiData = ({
       }
 
       if (subscription && websocketActiveSubscriptions.has(subscription)) {
-        if (isPaused) {
+        if (Boolean(hasUrlParams || isRefreshPaused)) {
           websocketConnection?.instance?.off(event);
           websocketActiveSubscriptions.delete(subscription);
         }
         return;
       }
 
-      if (isPaused) {
+      if (isRefreshPaused) {
         return;
       }
 
@@ -112,7 +112,7 @@ export const useFetchApiData = ({
       subscription,
       hasUrlParams,
       isCalled,
-      isPaused,
+      isRefreshPaused,
       onApiData
     ]
   );

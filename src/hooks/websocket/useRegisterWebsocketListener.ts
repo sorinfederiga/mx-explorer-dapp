@@ -62,7 +62,7 @@ export function useRegisterWebsocketListener({
     if (!hasSubscription) {
       websocket.emit(subscription, websocketConfig, (response: any) => {
         console.info(
-          `Websocket New Subscription ${subscription} with options`,
+          `New Websocket Subscription ${subscription} with options`,
           websocketConfig,
           response
         );
@@ -86,7 +86,7 @@ export function useRegisterWebsocketListener({
         websocketPendingSubscriptions.delete(subscription);
         websocketActiveSubscriptions.add(subscription);
       }
-      // console.info(`Client ${event}:`, response);
+      console.info(`Client ${event}:`, response);
       onWebsocketEvent(response);
     });
 
