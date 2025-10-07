@@ -12,19 +12,19 @@ import { WebsocketEventsEnum, WebsocketSubcriptionsEnum } from 'types';
 import { useHasWebsocketUrl } from './useHasWebsocketUrl';
 
 export interface RegisterWebsocketListenerType {
-  onEvent: (response: any) => void;
+  onWebsocketEvent: (response: any) => void;
   subscription?: WebsocketSubcriptionsEnum;
   event?: WebsocketEventsEnum;
   config?: Record<string, any>;
-  hasUrlParams?: boolean;
+  isPaused?: boolean;
 }
 
 export function useRegisterWebsocketListener({
+  onWebsocketEvent,
   subscription,
   event,
   config,
-  onEvent,
-  hasUrlParams
+  isPaused
 }: RegisterWebsocketListenerType) {
   const hasWebsocketUrl = useHasWebsocketUrl();
 
@@ -47,7 +47,7 @@ export function useRegisterWebsocketListener({
     if (
       !websocket ||
       !websocket?.active ||
-      hasUrlParams ||
+      isPaused ||
       websocketConnection.status !== WebsocketConnectionStatusEnum.COMPLETED
     ) {
       return;
@@ -87,7 +87,7 @@ export function useRegisterWebsocketListener({
         websocketActiveSubscriptions.add(subscription);
       }
       console.info(`Client ${event}:`, response);
-      onEvent(response);
+      onWebsocketEvent(response);
     });
 
     return () => {
@@ -103,6 +103,6 @@ export function useRegisterWebsocketListener({
     hasWebsocketUrl,
     event,
     subscription,
-    hasUrlParams
+    isPaused
   ]);
 }

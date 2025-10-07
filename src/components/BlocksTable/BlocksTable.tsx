@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import { ELLIPSIS } from 'appConstants';
 import {
   NetworkLink,
@@ -12,11 +14,15 @@ import {
   TableWrapper,
   PageSize,
   ColSpanWrapper,
-  Loader
+  Loader,
+  PauseRefreshButton
 } from 'components';
 import { formatSize } from 'helpers';
 import { useIsSovereign } from 'hooks';
+import { blocksSelector } from 'redux/selectors';
+import { pauseRefresh, resumeRefresh } from 'redux/slices';
 import { UIBlockType, WithClassnameType } from 'types';
+
 import { FailedBlocks } from './components/FailedBlocks';
 import { NoBlocks } from './components/NoBlocks';
 
@@ -37,6 +43,7 @@ export const BlocksTable = ({
   dataChanged,
   isDataReady
 }: BlocksTableUIType) => {
+  const { isRefreshPaused } = useSelector(blocksSelector);
   const isSovereign = useIsSovereign();
   const colSpan = showProposerIdentity ? 8 : 7;
 
@@ -76,7 +83,16 @@ export const BlocksTable = ({
                   <th className={showProposerIdentity ? '' : 'text-end'}>
                     Block Hash
                   </th>
-                  {showProposerIdentity && <th>Leader</th>}
+                  {showProposerIdentity && (
+                    <th className='d-flex align-item-center justify-content-between'>
+                      Leader{' '}
+                      <PauseRefreshButton
+                        pauseRefresh={pauseRefresh}
+                        resumeRefresh={resumeRefresh}
+                        isRefreshPaused={isRefreshPaused}
+                      />
+                    </th>
+                  )}
                 </tr>
               </thead>
               <tbody data-testid='blocksTable'>

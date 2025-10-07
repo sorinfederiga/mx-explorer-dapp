@@ -49,7 +49,7 @@ export const useFetchStats = () => {
   useRegisterWebsocketListener({
     subscription: WebsocketSubcriptionsEnum.subscribeStats,
     event: WebsocketEventsEnum.statsUpdate,
-    onEvent: onWebsocketEvent
+    onWebsocketEvent
   });
 
   const fetchStats = async () => {

@@ -24,7 +24,8 @@ export interface RolesType {
 
 export interface SliceType {
   isWebsocket?: boolean;
-  isDataReady?: boolean | undefined;
+  isDataReady?: boolean;
+  isRefreshPaused?: boolean;
 }
 
 export enum TrendEnum {

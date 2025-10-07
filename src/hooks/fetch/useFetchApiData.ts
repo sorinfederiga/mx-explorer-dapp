@@ -22,7 +22,7 @@ export interface FetchApiDataProps {
   event?: WebsocketEventsEnum;
   config?: Record<string, any>;
   urlParams?: Record<string, any>;
-  isActiveWebsocket?: boolean;
+  isRefreshPaused?: boolean;
 }
 
 export const useFetchApiData = ({
@@ -34,7 +34,8 @@ export const useFetchApiData = ({
   subscription,
   event,
   config = {},
-  urlParams = {}
+  urlParams = {},
+  isRefreshPaused = false
 }: FetchApiDataProps) => {
   const { page, size } = useGetPage();
   const [dataChanged, setDataChanged] = useState(false);
@@ -44,23 +45,27 @@ export const useFetchApiData = ({
   const hasUrlParams =
     Object.keys(urlParams).length > 0 || page !== 1 || size !== PAGE_SIZE;
 
+  const isPaused = Boolean(hasUrlParams || isRefreshPaused);
+
   const onWebsocketEvent = useCallback(
     (event: any[]) => {
-      if (hasUrlParams || !onWebsocketData) {
+      console.log('---hasUrlParams', hasUrlParams);
+      console.log('---isRefreshPaused', isRefreshPaused);
+      if (isPaused || !onWebsocketData) {
         return;
       }
 
       onWebsocketData(event);
     },
-    [urlParams, onWebsocketData]
+    [isPaused, onWebsocketData]
   );
 
   useRegisterWebsocketListener({
     subscription,
     event,
     config: { from: 0, size: PAGE_SIZE, ...config },
-    onEvent: onWebsocketEvent,
-    hasUrlParams
+    onWebsocketEvent,
+    isPaused
   });
 
   const fetchData = useCallback(
@@ -70,10 +75,14 @@ export const useFetchApiData = ({
       }
 
       if (subscription && websocketActiveSubscriptions.has(subscription)) {
-        if (hasUrlParams) {
+        if (isPaused) {
           websocketConnection?.instance?.off(event);
           websocketActiveSubscriptions.delete(subscription);
         }
+        return;
+      }
+
+      if (isPaused) {
         return;
       }
 
@@ -105,6 +114,7 @@ export const useFetchApiData = ({
       subscription,
       hasUrlParams,
       isCalled,
+      isPaused,
       onApiData
     ]
   );
