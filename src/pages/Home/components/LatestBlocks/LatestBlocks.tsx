@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import {
@@ -12,23 +12,46 @@ import {
 } from 'components';
 import { FailedBlocks } from 'components/BlocksTable/components/FailedBlocks';
 import { NoBlocks } from 'components/BlocksTable/components/NoBlocks';
-import { urlBuilder } from 'helpers';
+import { formatLatestEntries, urlBuilder } from 'helpers';
 import { useAdapter, useFetchBlocks } from 'hooks';
 import { activeNetworkSelector, refreshSelector } from 'redux/selectors';
 import { blocksRoutes } from 'routes';
-import { WebsocketEventsEnum, WebsocketSubcriptionsEnum } from 'types';
+import {
+  UIBlockType,
+  WebsocketEventsEnum,
+  WebsocketSubcriptionsEnum
+} from 'types';
 
 export const LatestBlocks = () => {
   const { timestamp } = useSelector(refreshSelector);
   const { id: activeNetworkId } = useSelector(activeNetworkSelector);
-
   const { getBlocks } = useAdapter();
 
-  const { fetchBlocks, blocks, isDataReady } = useFetchBlocks({
+  const previousBlocksRef = useRef<UIBlockType[]>([]);
+
+  const {
+    fetchBlocks,
+    blocks: latestBlocks,
+    isDataReady
+  } = useFetchBlocks({
     dataPromise: getBlocks,
     subscription: WebsocketSubcriptionsEnum.subscribeBlocks,
     event: WebsocketEventsEnum.blocksUpdate
   });
+
+  const blocks = useMemo(
+    () =>
+      formatLatestEntries({
+        latestEntries: latestBlocks,
+        previousEntries: previousBlocksRef.current,
+        identifier: 'hash'
+      }) as UIBlockType[],
+    [latestBlocks]
+  );
+
+  useEffect(() => {
+    previousBlocksRef.current = blocks;
+  }, [blocks]);
 
   useEffect(fetchBlocks, [activeNetworkId, timestamp]);
 

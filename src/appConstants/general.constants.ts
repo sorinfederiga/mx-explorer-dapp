@@ -9,6 +9,7 @@ export const REFRESH_RATE = 6000;
 export const POOLING_REFRESH_RATE_LIMIT = 1000;
 export const POOLING_REFRESH_RATE = 3000;
 export const PAGE_SIZE = 25;
+export const HOMEPAGE_LATEST_ITEM_SIZE = 5;
 export const MAX_TRANSACTIONS_PAGE_SIZE = 50;
 export const MAX_RESULTS = 10000;
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import {
@@ -19,27 +19,49 @@ import { NoTransactions } from 'components/TransactionsTable/components/NoTransa
 import { TransactionValue } from 'components/TransactionsTable/components/TransactionValue';
 import {
   addressIsBech32,
+  formatLatestEntries,
   getDisplayReceiver,
   getTransactionStatusIconAndColor
 } from 'helpers';
 import { useAdapter, useFetchTransactions, useIsSovereign } from 'hooks';
 import { refreshSelector } from 'redux/selectors';
-import { WebsocketEventsEnum, WebsocketSubcriptionsEnum } from 'types';
+import {
+  UITransactionType,
+  WebsocketEventsEnum,
+  WebsocketSubcriptionsEnum
+} from 'types';
 
 export const LatestTransactions = () => {
   const isSovereign = useIsSovereign();
   const { timestamp } = useSelector(refreshSelector);
-
   const { getTransactions } = useAdapter();
 
-  const { fetchTransactions, transactions, isDataReady } = useFetchTransactions(
-    {
-      dataPromise: getTransactions,
-      filters: { ...(isSovereign ? { withCrossChainTransfers: true } : {}) },
-      subscription: WebsocketSubcriptionsEnum.subscribeTransactions,
-      event: WebsocketEventsEnum.transactionUpdate
-    }
+  const previousTransactionsRef = useRef<UITransactionType[]>([]);
+
+  const {
+    fetchTransactions,
+    transactions: latestTransactions,
+    isDataReady
+  } = useFetchTransactions({
+    dataPromise: getTransactions,
+    filters: { ...(isSovereign ? { withCrossChainTransfers: true } : {}) },
+    subscription: WebsocketSubcriptionsEnum.subscribeTransactions,
+    event: WebsocketEventsEnum.transactionUpdate
+  });
+
+  const transactions = useMemo(
+    () =>
+      formatLatestEntries({
+        latestEntries: latestTransactions,
+        previousEntries: previousTransactionsRef.current,
+        identifier: 'txHash'
+      }) as UITransactionType[],
+    [latestTransactions]
   );
+
+  useEffect(() => {
+    previousTransactionsRef.current = transactions;
+  }, [transactions]);
 
   useEffect(fetchTransactions, [timestamp]);
 
