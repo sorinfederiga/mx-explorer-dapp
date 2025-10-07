@@ -3,7 +3,11 @@ import BigNumber from 'bignumber.js';
 import { LOW_LIQUIDITY_DISPLAY_TRESHOLD } from 'appConstants';
 import { TokenType } from 'types';
 
-export const isValidAccountTokenValue = (token: TokenType) => {
+export const isValidAccountTokenValue = (token?: TokenType) => {
+  if (!token) {
+    return true;
+  }
+
   const hasValidDisplayValue =
     token.valueUsd &&
     token.isLowLiquidity === undefined &&
