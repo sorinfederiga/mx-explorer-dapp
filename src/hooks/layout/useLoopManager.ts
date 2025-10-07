@@ -2,7 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { REFRESH_RATE } from 'appConstants';
+import {
+  POOLING_REFRESH_RATE,
+  POOLING_REFRESH_RATE_LIMIT,
+  REFRESH_RATE
+} from 'appConstants';
 import {
   activeNetworkSelector,
   refreshSelector,
@@ -17,11 +21,15 @@ export const useLoopManager = () => {
   const { unprocessed } = useSelector(statsSelector);
   const { refreshRate: statsRefreshRate } = unprocessed;
 
-  const { refreshRate: initialNetworkRefreshRate } = useSelector(
-    activeNetworkSelector
-  );
+  const { refreshRate: initialNetworkRefreshRate, updatesWebsocketUrl } =
+    useSelector(activeNetworkSelector);
 
   const initialRefreshRate = useMemo(() => {
+    // if there is a websocket option, and a sub-second refreshrate, keep the POOLING_REFRESH_RATE
+    if (updatesWebsocketUrl && statsRefreshRate < POOLING_REFRESH_RATE_LIMIT) {
+      return POOLING_REFRESH_RATE;
+    }
+
     if (statsRefreshRate) {
       return statsRefreshRate;
     }
@@ -31,7 +39,7 @@ export const useLoopManager = () => {
     }
 
     return REFRESH_RATE;
-  }, [initialNetworkRefreshRate, statsRefreshRate]);
+  }, [initialNetworkRefreshRate, statsRefreshRate, updatesWebsocketUrl]);
 
   const [refreshRate, setRefreshRate] = useState(initialRefreshRate);
 
@@ -56,9 +64,16 @@ export const useLoopManager = () => {
 
   useEffect(() => {
     if (statsRefreshRate && statsRefreshRate !== refreshRate) {
+      if (
+        updatesWebsocketUrl &&
+        statsRefreshRate < POOLING_REFRESH_RATE_LIMIT
+      ) {
+        return;
+      }
+
       setRefreshRate(statsRefreshRate);
     }
-  }, [statsRefreshRate, refreshRate]);
+  }, [statsRefreshRate, refreshRate, updatesWebsocketUrl]);
 
   useEffect(setLoopInterval, [refreshRate]);
 };

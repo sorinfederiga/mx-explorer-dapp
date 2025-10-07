@@ -78,6 +78,10 @@ export function useRegisterWebsocketListener({
     }
 
     websocket.on(event, (response: any) => {
+      if (document.hidden) {
+        return;
+      }
+
       if (websocketPendingSubscriptions.has(subscription)) {
         websocketPendingSubscriptions.delete(subscription);
         websocketActiveSubscriptions.add(subscription);
