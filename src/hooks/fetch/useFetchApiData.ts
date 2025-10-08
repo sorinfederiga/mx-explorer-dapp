@@ -20,7 +20,7 @@ export interface FetchApiDataProps {
   filters?: Record<string, any>;
   subscription?: WebsocketSubcriptionsEnum;
   event?: WebsocketEventsEnum;
-  config?: Record<string, any>;
+  websocketConfig?: Record<string, any>;
   urlParams?: Record<string, any>;
   isRefreshPaused?: boolean;
 }
@@ -33,7 +33,7 @@ export const useFetchApiData = ({
   filters = {},
   subscription,
   event,
-  config = {},
+  websocketConfig = {},
   urlParams = {},
   isRefreshPaused = false
 }: FetchApiDataProps) => {
@@ -61,7 +61,7 @@ export const useFetchApiData = ({
   useRegisterWebsocketListener({
     subscription,
     event,
-    config: { from: 0, size: PAGE_SIZE, ...config },
+    config: { from: 0, size: PAGE_SIZE, ...websocketConfig },
     onWebsocketEvent,
     isPaused
   });

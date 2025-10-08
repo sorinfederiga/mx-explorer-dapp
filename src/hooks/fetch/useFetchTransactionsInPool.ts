@@ -21,12 +21,8 @@ export const useFetchTransactionsInPool = (
 
   const { dataCountPromise, filters } = props;
 
-  const {
-    transactionsInPool,
-    transactionsInPoolCount,
-    isDataReady,
-    isWebsocket
-  } = useSelector(transactionsInPoolSelector);
+  const { transactionsInPool, transactionsInPoolCount, isDataReady } =
+    useSelector(transactionsInPoolSelector);
 
   const onWebsocketData = (event: TransactionsInPoolWebsocketResponseType) => {
     if (!event) {
