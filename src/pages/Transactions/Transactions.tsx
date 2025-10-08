@@ -68,6 +68,7 @@ export const Transactions = () => {
               inactiveFilters={[]}
               dataChanged={dataChanged}
               isDataReady={isDataReady}
+              hasPauseButton
               title={
                 <h5
                   data-testid='title'

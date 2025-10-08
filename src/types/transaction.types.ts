@@ -285,9 +285,9 @@ export interface TransactionInPoolSliceType extends SliceType {
 
 export interface TransactionTableType {
   transactions: UITransactionType[];
+  totalTransactions: number | typeof ELLIPSIS;
   address?: string;
   token?: string;
-  totalTransactions: number | typeof ELLIPSIS;
   title?: React.ReactNode;
   showDirectionCol?: boolean;
   dataChanged?: boolean;
@@ -295,6 +295,7 @@ export interface TransactionTableType {
   isScResultsTable?: boolean;
   isDataReady?: boolean;
   inactiveFilters?: TransactionFiltersEnum[];
+  hasPauseButton?: boolean;
 }
 
 export enum TransactionDirectionEnum {

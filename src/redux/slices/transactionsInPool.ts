@@ -8,6 +8,7 @@ export const getInitialTransactionsInPoolState =
       transactionsInPool: [],
       transactionsInPoolCount: ELLIPSIS,
       isDataReady: undefined,
+      isRefreshPaused: false,
       isWebsocket: false
     };
   };
@@ -36,10 +37,17 @@ export const transactionsInPoolSlice = createSlice({
 
       state.isDataReady = action.payload.isDataReady;
       state.isWebsocket = action.payload.isWebsocket;
+    },
+    pauseRefresh: (state: TransactionInPoolSliceType) => {
+      state.isRefreshPaused = true;
+    },
+    resumeRefresh: (state: TransactionInPoolSliceType) => {
+      state.isRefreshPaused = false;
     }
   }
 });
 
-export const { setTransactionsInPool } = transactionsInPoolSlice.actions;
+export const { setTransactionsInPool, pauseRefresh, resumeRefresh } =
+  transactionsInPoolSlice.actions;
 
 export const transactionsInPoolReducer = transactionsInPoolSlice.reducer;

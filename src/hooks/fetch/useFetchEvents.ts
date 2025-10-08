@@ -18,7 +18,8 @@ export const useFetchEvents = (props: Omit<FetchApiDataProps, 'onApiData'>) => {
   const { page, size } = useGetPage();
   const { dataCountPromise, filters } = props;
 
-  const { events, eventsCount, isDataReady } = useSelector(eventsSelector);
+  const { events, eventsCount, isDataReady, isRefreshPaused } =
+    useSelector(eventsSelector);
 
   const onWebsocketData = (event: EventsWebsocketResponseType) => {
     if (!event) {
@@ -61,7 +62,8 @@ export const useFetchEvents = (props: Omit<FetchApiDataProps, 'onApiData'>) => {
     },
     onWebsocketData,
     onApiData,
-    urlParams: eventFilters
+    urlParams: eventFilters,
+    isRefreshPaused
   });
 
   return {

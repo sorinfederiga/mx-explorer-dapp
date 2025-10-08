@@ -20,7 +20,7 @@ import {
 import { formatSize } from 'helpers';
 import { useIsSovereign } from 'hooks';
 import { blocksSelector } from 'redux/selectors';
-import { pauseRefresh, resumeRefresh } from 'redux/slices';
+import { pauseRefresh, resumeRefresh } from 'redux/slices/blocks';
 import { UIBlockType, WithClassnameType } from 'types';
 
 import { FailedBlocks } from './components/FailedBlocks';

@@ -21,8 +21,12 @@ export const useFetchTransactionsInPool = (
 
   const { dataCountPromise, filters } = props;
 
-  const { transactionsInPool, transactionsInPoolCount, isDataReady } =
-    useSelector(transactionsInPoolSelector);
+  const {
+    transactionsInPool,
+    transactionsInPoolCount,
+    isDataReady,
+    isRefreshPaused
+  } = useSelector(transactionsInPoolSelector);
 
   const onWebsocketData = (event: TransactionsInPoolWebsocketResponseType) => {
     if (!event) {
@@ -64,7 +68,8 @@ export const useFetchTransactionsInPool = (
     },
     onWebsocketData,
     onApiData,
-    urlParams: transactionFilters
+    urlParams: transactionFilters,
+    isRefreshPaused
   });
 
   return {

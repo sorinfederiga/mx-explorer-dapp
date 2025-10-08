@@ -7,6 +7,7 @@ export const getInitialTransactionsState = (): TransactionSliceType => {
     transactions: [],
     transactionsCount: ELLIPSIS,
     isDataReady: undefined,
+    isRefreshPaused: false,
     isWebsocket: false
   };
 };
@@ -35,10 +36,17 @@ export const transactionsSlice = createSlice({
 
       state.isDataReady = action.payload.isDataReady;
       state.isWebsocket = action.payload.isWebsocket;
+    },
+    pauseRefresh: (state: TransactionSliceType) => {
+      state.isRefreshPaused = true;
+    },
+    resumeRefresh: (state: TransactionSliceType) => {
+      state.isRefreshPaused = false;
     }
   }
 });
 
-export const { setTransactions } = transactionsSlice.actions;
+export const { setTransactions, pauseRefresh, resumeRefresh } =
+  transactionsSlice.actions;
 
 export const transactionsReducer = transactionsSlice.reducer;
