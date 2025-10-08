@@ -12,6 +12,7 @@ import { faChartBar } from 'icons/regular';
 import { activeNetworkSelector } from 'redux/selectors';
 import { ChartResolutionRangeType } from 'types';
 
+import { ChartResolutionSelector } from './components/ChartResolution';
 import { getChartColorPalette } from '../helpers/getChartColorPalette';
 
 export interface AnalyticsChartDataType {
