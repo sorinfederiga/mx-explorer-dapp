@@ -6,6 +6,7 @@ export * from './pageStats';
 export * from './urlFilters';
 export * from './useActiveRoute';
 export * from './websocket';
+export * from './widgets';
 
 export * from './useCustomNetwork';
 export * from './useDebounce';

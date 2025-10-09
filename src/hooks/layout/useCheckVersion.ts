@@ -1,26 +1,20 @@
 import { useEffect } from 'react';
 import axios from 'axios';
-import moment from 'moment';
-import { useSelector } from 'react-redux';
 
-import { NEW_VERSION_NOTIFICATION } from 'appConstants';
+import {
+  LONG_POOLING_REFRESH_RATE,
+  NEW_VERSION_NOTIFICATION
+} from 'appConstants';
 import { useNotifications } from 'hooks';
-import { refreshSelector } from 'redux/selectors';
 
 export const useCheckVersion = () => {
-  const { timestamp } = useSelector(refreshSelector);
-
-  const refreshRate = 60 * 1000;
   const { addNotification } = useNotifications();
 
-  const isMainnetExplorer =
-    window.location.origin === 'https://explorer.multiversx.com';
+  // const isMainnetExplorer =
+  //   window.location.origin === 'https://explorer.multiversx.com';
+  const isMainnetExplorer = true;
   const explorerVersion = import.meta.env.VITE_APP_CACHE_BUST;
   const explorerVersionUrl = import.meta.env.VITE_APP_VERSION_URL;
-
-  const withinInterval = moment()
-    .subtract(refreshRate, 'ms')
-    .isAfter(moment(timestamp));
 
   const checkVersion = () => {
     axios
@@ -45,21 +39,14 @@ export const useCheckVersion = () => {
       });
   };
 
-  const useLoop = () => {
-    const intervalId = setInterval(() => {
-      if (
-        !withinInterval &&
-        !document.hidden &&
-        isMainnetExplorer &&
-        explorerVersionUrl
-      ) {
-        checkVersion();
-      }
-    }, refreshRate);
+  useEffect(() => {
+    if (!isMainnetExplorer || !explorerVersionUrl || document.hidden) {
+      return;
+    }
+
+    const intervalId = setInterval(checkVersion, LONG_POOLING_REFRESH_RATE);
     return () => {
       clearInterval(intervalId);
     };
-  };
-
-  useEffect(useLoop, []);
+  }, []);
 };
