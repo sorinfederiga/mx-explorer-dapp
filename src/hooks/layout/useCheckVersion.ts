@@ -10,9 +10,8 @@ import { useNotifications } from 'hooks';
 export const useCheckVersion = () => {
   const { addNotification } = useNotifications();
 
-  // const isMainnetExplorer =
-  //   window.location.origin === 'https://explorer.multiversx.com';
-  const isMainnetExplorer = true;
+  const isMainnetExplorer =
+    window.location.origin === 'https://explorer.multiversx.com';
   const explorerVersion = import.meta.env.VITE_APP_CACHE_BUST;
   const explorerVersionUrl = import.meta.env.VITE_APP_VERSION_URL;
 
@@ -21,17 +20,15 @@ export const useCheckVersion = () => {
       .get(`https:${explorerVersionUrl}?${Date.now()}`)
       .then(({ data: latestExplorerVersion }) => {
         if (
-          explorerVersion !== undefined &&
-          latestExplorerVersion !== undefined
+          latestExplorerVersion &&
+          explorerVersion !== latestExplorerVersion
         ) {
-          if (explorerVersion !== latestExplorerVersion) {
-            addNotification({
-              id: NEW_VERSION_NOTIFICATION,
-              text: 'A new version of the Explorer is available.',
-              dismissable: false,
-              priority: 1
-            });
-          }
+          addNotification({
+            id: NEW_VERSION_NOTIFICATION,
+            text: 'A new version of the Explorer is available.',
+            dismissable: false,
+            priority: 1
+          });
         }
       })
       .catch((err) => {
