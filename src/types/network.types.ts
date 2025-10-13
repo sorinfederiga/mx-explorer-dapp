@@ -14,6 +14,7 @@ export interface NetworkType extends Partial<NetworkConfigType> {
   proxyUrl?: string;
   updatesWebsocketUrl?: string;
   nftExplorerAddress?: string;
+  hasWebsocket?: boolean;
   hasExchangeData?: boolean;
   isSovereign?: boolean;
   isCustom?: boolean;
