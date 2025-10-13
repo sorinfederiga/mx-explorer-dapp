@@ -7,7 +7,9 @@ import { useFetchWebsocketConfig } from 'hooks/fetch';
 import { activeNetworkSelector } from 'redux/selectors';
 
 export const useInitWebsocket = () => {
-  const { updatesWebsocketUrl } = useSelector(activeNetworkSelector);
+  const { updatesWebsocketUrl, hasWebsocket } = useSelector(
+    activeNetworkSelector
+  );
   const fetchWebsocketConfig = useFetchWebsocketConfig();
   const isWebsocketActive = isUpdatesWebsocketActive();
 
@@ -21,10 +23,10 @@ export const useInitWebsocket = () => {
   };
 
   useEffect(() => {
-    if (isWebsocketActive) {
+    if (isWebsocketActive || hasWebsocket === false) {
       return;
     }
 
     configWebsocket();
-  }, [updatesWebsocketUrl, isWebsocketActive]);
+  }, [updatesWebsocketUrl, hasWebsocket, isWebsocketActive]);
 };

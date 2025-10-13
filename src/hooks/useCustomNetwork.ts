@@ -97,7 +97,9 @@ export const useCustomNetwork = (customUrl: string) => {
           walletAddress,
           explorerAddress,
           ...(updatesWebsocketUrl
-            ? { updatesWebsocketUrl: `https://${updatesWebsocketUrl}` }
+            ? {
+                updatesWebsocketUrl: `https://${updatesWebsocketUrl}`
+              }
             : {})
         };
 
@@ -107,10 +109,13 @@ export const useCustomNetwork = (customUrl: string) => {
           const configData = {
             key: CUSTOM_NETWORK_ID as typeof CUSTOM_NETWORK_ID,
             data: JSON.stringify([customNetwork]),
-            expirationDate: isSubSubdomain ? in2Minutes : in30Days
+            expirationDate: in30Days
           };
           if (isSubSubdomain) {
-            cookie.saveToCookies(configData);
+            cookie.saveToCookies({
+              ...configData,
+              expirationDate: isSubSubdomain ? in2Minutes : in30Days
+            });
           } else {
             storage.saveToLocal(configData);
           }
