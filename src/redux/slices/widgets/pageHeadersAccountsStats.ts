@@ -17,11 +17,19 @@ export const pageHeadersAccountsStatsSlice = createSlice({
       // state.newAccountsToday = action.payload.newAccountsToday;
       state.usersStaking = action.payload.usersStaking;
       state.activeAccountsToday = action.payload.activeAccountsToday;
+    },
+    setPageHeaderAccountStatsTotalAccounts: (
+      state: HeadersAccountsType,
+      action: PayloadAction<number | string>
+    ) => {
+      state.totalAccounts = action.payload;
     }
   }
 });
 
-export const { setPageHeaderAccountsStats } =
-  pageHeadersAccountsStatsSlice.actions;
+export const {
+  setPageHeaderAccountsStats,
+  setPageHeaderAccountStatsTotalAccounts
+} = pageHeadersAccountsStatsSlice.actions;
 
 export const pageHeadersAccountsReducer = pageHeadersAccountsStatsSlice.reducer;
