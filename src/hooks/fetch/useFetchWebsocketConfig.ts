@@ -35,10 +35,13 @@ export const useFetchWebsocketConfig = () => {
     const { data, success } = await getWebsocketConfigOnce();
 
     if (data?.url && success) {
+      const updatesWebsocketUrl = String(data.url).startsWith('https://')
+        ? data.url
+        : `https://${data.url}`;
       dispatch(
         changeStateNetwork({
           ...activeNetwork,
-          updatesWebsocketUrl: `https://${data.url}`
+          updatesWebsocketUrl
         })
       );
     }

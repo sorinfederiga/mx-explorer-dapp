@@ -44,7 +44,8 @@ export const CustomNetworkDetails = ({ className }: WithClassnameType) => {
     configCustomNetwork?.id === activeNetwork?.id;
   const defaultNetwork = networks.find((network) => Boolean(network.default));
   const defaultNetworkId = defaultNetwork?.id ?? networks[0]?.id;
-  const hasActiveWebsocket = existingCustomNetwork.hasWebsocket !== false;
+  const hasActiveWebsocket =
+    existingCustomNetwork && existingCustomNetwork.hasWebsocket !== false;
 
   const removeNetwork = () => {
     storage.removeFromLocal(CUSTOM_NETWORK_ID);
