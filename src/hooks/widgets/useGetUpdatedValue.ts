@@ -16,7 +16,7 @@ export const useGetUpdatedValue = ({
   const updatedValue = useMemo(() => {
     if (
       !currentValue ||
-      !previousUpdatedValue.current ||
+      !previousValue.current ||
       !previousUpdatedValue.current
     ) {
       return initialValue;
@@ -29,7 +29,7 @@ export const useGetUpdatedValue = ({
       : initialValue;
 
     if (new BigNumber(currentValue).isLessThan(previousValue.current)) {
-      return 0;
+      return initialValue;
     }
 
     const valueDiff = new BigNumber(currentValue).minus(previousValue.current);
