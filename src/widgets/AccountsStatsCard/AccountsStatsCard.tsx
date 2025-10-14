@@ -1,22 +1,37 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 
-import { InfoTooltip } from 'components';
+import { POOLING_REFRESH_RATE_LIMIT } from 'appConstants';
+import { FormatNumber, InfoTooltip } from 'components';
 import { formatBigNumber } from 'helpers';
 import { useGetNewAccountsToday, useHasGrowthWidgets } from 'hooks';
 import { faCircleBolt } from 'icons/solid';
-import { statsSelector } from 'redux/selectors';
+import { activeNetworkSelector, statsSelector } from 'redux/selectors';
 import { StatsCard } from 'widgets';
 
 export const AccountsStatsCard = () => {
   const hasGrowthWidgets = useHasGrowthWidgets();
-  const { stats } = useSelector(statsSelector);
-  const { accounts } = stats;
+  const { refreshRate } = useSelector(activeNetworkSelector);
+  const { unprocessed } = useSelector(statsSelector);
+  const { accounts } = unprocessed;
 
   const newAccountsToday = useGetNewAccountsToday();
+  const isAnimated = Boolean(
+    refreshRate && refreshRate < POOLING_REFRESH_RATE_LIMIT
+  );
 
   return (
-    <StatsCard title='Total Accounts' value={accounts}>
+    <StatsCard
+      title='Total Accounts'
+      value={
+        <FormatNumber
+          value={accounts}
+          isAnimated={isAnimated}
+          showEllipsisIfZero
+        />
+      }
+      isAnimated={isAnimated}
+    >
       {hasGrowthWidgets && (
         <>
           <FontAwesomeIcon icon={faCircleBolt} className='me-2' />

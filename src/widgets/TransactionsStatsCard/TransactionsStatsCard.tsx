@@ -1,10 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 
+import { POOLING_REFRESH_RATE_LIMIT } from 'appConstants';
+import { FormatNumber } from 'components';
 import { formatBigNumber } from 'helpers';
 import { useGetNewTransactionsToday, useHasGrowthWidgets } from 'hooks';
 import { faCirclePlus } from 'icons/solid';
-import { statsSelector } from 'redux/selectors';
+import { activeNetworkSelector, statsSelector } from 'redux/selectors';
 import { StatsCard } from 'widgets';
 
 export const TransactionsStatsCard = ({
@@ -13,16 +15,28 @@ export const TransactionsStatsCard = ({
   className?: string;
 }) => {
   const hasGrowthWidgets = useHasGrowthWidgets();
-  const { stats } = useSelector(statsSelector);
-  const { transactions } = stats;
+  const { refreshRate } = useSelector(activeNetworkSelector);
+  const { unprocessed } = useSelector(statsSelector);
+  const { transactions } = unprocessed;
 
   const newTransactionsToday = useGetNewTransactionsToday();
+
+  const isAnimated = Boolean(
+    refreshRate && refreshRate < POOLING_REFRESH_RATE_LIMIT
+  );
 
   return (
     <StatsCard
       title='Total Transactions'
-      value={transactions}
+      value={
+        <FormatNumber
+          value={transactions}
+          isAnimated={isAnimated}
+          showEllipsisIfZero
+        />
+      }
       className={className}
+      isAnimated={isAnimated}
     >
       {hasGrowthWidgets && (
         <>
