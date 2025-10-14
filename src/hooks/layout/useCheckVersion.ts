@@ -1,16 +1,13 @@
 import { useEffect } from 'react';
 import axios from 'axios';
-import moment from 'moment';
-import { useSelector } from 'react-redux';
 
-import { NEW_VERSION_NOTIFICATION } from 'appConstants';
+import {
+  LONG_POOLING_REFRESH_RATE,
+  NEW_VERSION_NOTIFICATION
+} from 'appConstants';
 import { useNotifications } from 'hooks';
-import { refreshSelector } from 'redux/selectors';
 
 export const useCheckVersion = () => {
-  const { timestamp } = useSelector(refreshSelector);
-
-  const refreshRate = 60 * 1000;
   const { addNotification } = useNotifications();
 
   const isMainnetExplorer =
@@ -18,26 +15,20 @@ export const useCheckVersion = () => {
   const explorerVersion = import.meta.env.VITE_APP_CACHE_BUST;
   const explorerVersionUrl = import.meta.env.VITE_APP_VERSION_URL;
 
-  const withinInterval = moment()
-    .subtract(refreshRate, 'ms')
-    .isAfter(moment(timestamp));
-
   const checkVersion = () => {
     axios
       .get(`https:${explorerVersionUrl}?${Date.now()}`)
       .then(({ data: latestExplorerVersion }) => {
         if (
-          explorerVersion !== undefined &&
-          latestExplorerVersion !== undefined
+          latestExplorerVersion &&
+          explorerVersion !== latestExplorerVersion
         ) {
-          if (explorerVersion !== latestExplorerVersion) {
-            addNotification({
-              id: NEW_VERSION_NOTIFICATION,
-              text: 'A new version of the Explorer is available.',
-              dismissable: false,
-              priority: 1
-            });
-          }
+          addNotification({
+            id: NEW_VERSION_NOTIFICATION,
+            text: 'A new version of the Explorer is available.',
+            dismissable: false,
+            priority: 1
+          });
         }
       })
       .catch((err) => {
@@ -45,21 +36,14 @@ export const useCheckVersion = () => {
       });
   };
 
-  const useLoop = () => {
-    const intervalId = setInterval(() => {
-      if (
-        !withinInterval &&
-        !document.hidden &&
-        isMainnetExplorer &&
-        explorerVersionUrl
-      ) {
-        checkVersion();
-      }
-    }, refreshRate);
+  useEffect(() => {
+    if (!isMainnetExplorer || !explorerVersionUrl || document.hidden) {
+      return;
+    }
+
+    const intervalId = setInterval(checkVersion, LONG_POOLING_REFRESH_RATE);
     return () => {
       clearInterval(intervalId);
     };
-  };
-
-  useEffect(useLoop, []);
+  }, []);
 };

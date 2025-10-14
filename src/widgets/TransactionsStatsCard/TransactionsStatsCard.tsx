@@ -1,15 +1,10 @@
-import { useEffect } from 'react';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSelector } from 'react-redux';
 
-import { useFetchGrowthHero, useHasGrowthWidgets } from 'hooks';
+import { formatBigNumber } from 'helpers';
+import { useGetNewTransactionsToday, useHasGrowthWidgets } from 'hooks';
 import { faCirclePlus } from 'icons/solid';
-import {
-  growthHeroSelector,
-  refreshSelector,
-  statsSelector
-} from 'redux/selectors';
+import { statsSelector } from 'redux/selectors';
 import { StatsCard } from 'widgets';
 
 export const TransactionsStatsCard = ({
@@ -18,34 +13,27 @@ export const TransactionsStatsCard = ({
   className?: string;
 }) => {
   const hasGrowthWidgets = useHasGrowthWidgets();
-  const { totalTransactions, totalTransactionsToday } =
-    useSelector(growthHeroSelector);
   const { stats } = useSelector(statsSelector);
-  const { timestamp } = useSelector(refreshSelector);
   const { transactions } = stats;
 
-  const fetchHero = useFetchGrowthHero();
-
-  useEffect(() => {
-    if (hasGrowthWidgets) {
-      fetchHero();
-    }
-  }, [timestamp, hasGrowthWidgets]);
+  const newTransactionsToday = useGetNewTransactionsToday();
 
   return (
-    <>
-      {hasGrowthWidgets ? (
-        <StatsCard
-          title='Total Transactions'
-          value={totalTransactions}
-          className={className}
-        >
+    <StatsCard
+      title='Total Transactions'
+      value={transactions}
+      className={className}
+    >
+      {hasGrowthWidgets && (
+        <>
           <FontAwesomeIcon icon={faCirclePlus} className='me-2' />
-          {totalTransactionsToday} today
-        </StatsCard>
-      ) : (
-        <StatsCard title='Total Transactions' value={transactions} />
+          {formatBigNumber({
+            value: newTransactionsToday,
+            showEllipsisIfZero: true
+          })}{' '}
+          today
+        </>
       )}
-    </>
+    </StatsCard>
   );
 };
