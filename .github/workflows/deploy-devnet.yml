@@ -2,7 +2,7 @@ name: deploy-devnet
 
 on:
   push:
-    branches: [development]
+    branches: [websocket-updates]
   repository_dispatch:
     types: deploy-devnet
   workflow_dispatch:
@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: development
+          ref: websocket-updates
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
