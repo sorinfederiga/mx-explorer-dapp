@@ -7,8 +7,6 @@ import { useFetchGrowthTransactions } from 'hooks';
 import { growthTransactionsSelector, statsSelector } from 'redux/selectors';
 import { StatisticType, TransactionsStatisticsLabelEnum } from 'types';
 
-import { useGetUpdatedValue } from './useGetUpdatedValue';
-
 export const useGetTransactionsStatistics = ({
   showTotal = true,
   customStatistics = []
@@ -27,14 +25,22 @@ export const useGetTransactionsStatistics = ({
   );
   const { unprocessed: unprocessedStats } = useSelector(statsSelector);
 
-  const liveTotalTransactions = useGetUpdatedValue({
-    initialValue: Number(unprocessedGrowth.totalTransactions),
-    currentValue: unprocessedStats.transactions
-  });
-  const liveScResults = useGetUpdatedValue({
-    initialValue: Number(unprocessedGrowth.scResults),
-    currentValue: unprocessedStats.scResults
-  });
+  const liveScResults = useMemo(() => {
+    if (unprocessedStats.scResults) {
+      return unprocessedStats.scResults;
+    }
+
+    return unprocessedGrowth.scResults;
+  }, [unprocessedStats.scResults, unprocessedGrowth.scResults]);
+
+  const liveTotalTransactions = useMemo(() => {
+    if (unprocessedStats.transactions) {
+      return unprocessedStats.transactions;
+    }
+
+    return unprocessedGrowth.totalTransactions;
+  }, [unprocessedStats.transactions, unprocessedGrowth.totalTransactions]);
+
   const liveNormalTransactions = useMemo(() => {
     if (new BigNumber(liveTotalTransactions).isGreaterThan(liveScResults)) {
       return new BigNumber(liveTotalTransactions).minus(liveScResults);
