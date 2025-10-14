@@ -21,6 +21,7 @@
     "@multiversx/sdk-dapp-sc-explorer": "0.0.5-beta.0",
     "@multiversx/sdk-dapp-ui": "0.0.35",
     "@multiversx/sdk-dapp-utils": "3.0.2",
+    "@number-flow/react": "0.5.10",
     "@react-three/fiber": "8.18.0",
     "@reduxjs/toolkit": "1.9.5",
     "anchorme": "2.1.2",

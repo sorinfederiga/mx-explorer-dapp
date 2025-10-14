@@ -1,13 +1,14 @@
+import { ReactNode } from 'react';
 import classNames from 'classnames';
 
 import { WithClassnameType } from 'types';
 
 export interface StatsCardUIType extends WithClassnameType {
-  title?: string | React.ReactNode;
-  subTitle?: string | React.ReactNode;
-  icon?: React.ReactNode;
-  value?: string | React.ReactNode;
-  children?: React.ReactNode;
+  title?: ReactNode;
+  subTitle?: ReactNode;
+  icon?: ReactNode;
+  value?: ReactNode;
+  children?: ReactNode;
 }
 
 export const StatsCard = ({

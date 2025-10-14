@@ -33,6 +33,8 @@ export interface FormatAmountUIType extends WithClassnameType {
   superSuffix?: boolean;
   showUsdValue?: boolean;
   decimalOpacity?: boolean;
+  isAnimated?: boolean;
+  showEllipsisIfZero?: boolean;
   usd?: string | number;
 }
 
