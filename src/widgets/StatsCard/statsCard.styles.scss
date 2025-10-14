@@ -1,6 +1,9 @@
 .stats-card {
   font-family: var(--headings-font-family);
   flex-grow: 1;
+  @include media-breakpoint-up(xl) {
+    flex: 1 1 0;
+  }
   .stats-card-body {
     justify-content: start;
   }
