@@ -7,10 +7,17 @@ export const useInitDatadog = () => {
       return;
     }
 
+    const applicationId = import.meta.env.VITE_APP_DATADOG_APPLICATION_ID;
+    const clientToken = import.meta.env.VITE_APP_DATADOG_CLIENT_TOKEN;
+
+    if (!applicationId || !clientToken) {
+      return;
+    }
+
     try {
       datadogRum.init({
-        applicationId: 'f0b5a015-e0da-479a-b92d-cbcb050fadec',
-        clientToken: 'pub784ed9eeb1278d0b8ce7466862ef82f0',
+        applicationId,
+        clientToken,
         // `site` refers to the Datadog site parameter of your organization
         // see https://docs.datadoghq.com/getting_started/site/
         site: 'datadoghq.eu',
