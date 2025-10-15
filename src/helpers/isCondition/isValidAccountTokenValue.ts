@@ -14,6 +14,6 @@ export const isValidAccountTokenValue = (token?: TokenType) => {
     new BigNumber(token.valueUsd).isLessThan(LOW_LIQUIDITY_DISPLAY_TRESHOLD);
 
   return Boolean(
-    (token.valueUsd && !token.isLowLiquidity) || hasValidDisplayValue
+    (token.valueUsd && token.isLowLiquidity === false) || hasValidDisplayValue
   );
 };
