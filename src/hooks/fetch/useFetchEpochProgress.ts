@@ -45,33 +45,35 @@ export const useFetchEpochProgress = () => {
     if (isNewState) {
       startRoundTime();
     }
+
     if (roundTimeProgress.isEqualTo(refreshIntervalSec) && !hasCallMade) {
       fetchStats().then(({ success }) => {
-        if (success) {
-          setHasCallMade(true);
-          const roundsLeft =
-            roundsPerEpoch >= roundsPassed ? roundsPerEpoch - roundsPassed : 0;
-          setEpochRoundsLeft((existingRound) => {
-            if (roundsLeft && typeof roundsLeft === 'number') {
-              if (!existingRound) {
-                return roundsLeft;
-              }
-              if (existingRound) {
-                if (existingRound === roundsLeft && roundsLeft > 0) {
-                  return roundsLeft - 1;
-                }
-                if (roundsLeft < existingRound) {
-                  return roundsLeft;
-                }
-                if (existingRound - roundsLeft < -6) {
-                  return roundsLeft;
-                }
-              }
-            }
-
-            return existingRound;
-          });
+        if (!success) {
+          return;
         }
+
+        const roundsLeft =
+          roundsPerEpoch >= roundsPassed ? roundsPerEpoch - roundsPassed : 0;
+
+        if (!roundsLeft || typeof roundsLeft !== 'number') {
+          return;
+        }
+
+        setHasCallMade(true);
+        setEpochRoundsLeft((existingRound) => {
+          if (!existingRound) {
+            return roundsLeft;
+          }
+
+          if (existingRound === roundsLeft && roundsLeft > 0) {
+            return roundsLeft - 1;
+          }
+          if (roundsLeft < existingRound || existingRound - roundsLeft < -6) {
+            return roundsLeft;
+          }
+
+          return existingRound;
+        });
       });
     } else {
       setHasCallMade(false);
@@ -102,13 +104,7 @@ export const useFetchEpochProgress = () => {
     if (refreshInterval && roundTimeProgress && timestamp) {
       updateStats();
     }
-  }, [
-    timestamp,
-    roundTimeProgress,
-    refreshInterval,
-    roundsPerEpoch,
-    roundsPassed
-  ]);
+  }, [timestamp, roundTimeProgress, refreshInterval]);
 
   const roundProgress = roundTimeProgress
     .times(100)

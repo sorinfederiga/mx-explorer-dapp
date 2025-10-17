@@ -18,7 +18,7 @@ export const EpochHeroPill = ({ className }: WithClassnameType) => {
     >
       <div className='d-flex flex-column lext-left me-3'>
         <div className='label' data-testid='currentEpoch'>
-          {formatBigNumber({ value: epoch, showEllipsisIfZero: true })}
+          Epoch {formatBigNumber({ value: epoch, showEllipsisIfZero: true })}
         </div>
         <div className='description cursor-context' title={epochTimeRemaining}>
           {formatBigNumber({ value: roundsLeft, showEllipsisIfZero: true })}{' '}

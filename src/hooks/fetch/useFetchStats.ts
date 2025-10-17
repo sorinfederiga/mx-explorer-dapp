@@ -1,5 +1,10 @@
+import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import {
+  websocketActiveSubscriptions,
+  websocketConnection
+} from 'appConstants';
 import { useAdapter, useRegisterWebsocketListener } from 'hooks';
 import { statsSelector } from 'redux/selectors';
 import { setStats } from 'redux/slices';
@@ -23,11 +28,6 @@ export const useFetchStats = () => {
 
     const requestPromise = new Promise(async (resolve, reject) => {
       try {
-        if (isWebsocket) {
-          resolve(stats);
-          return;
-        }
-
         const response = await getStats();
         resolve(response);
       } catch (error) {
@@ -52,7 +52,7 @@ export const useFetchStats = () => {
     onWebsocketEvent
   });
 
-  const fetchStats = async () => {
+  const fetchApiStats = async () => {
     const { data, success } = await getStatsOnce();
     if (data && success) {
       dispatch(
@@ -66,6 +66,17 @@ export const useFetchStats = () => {
 
     return { data, success };
   };
+
+  const fetchStats = useCallback(async () => {
+    if (
+      isWebsocket &&
+      websocketActiveSubscriptions.has(WebsocketSubcriptionsEnum.subscribeStats)
+    ) {
+      return { data: stats, success: true };
+    }
+
+    return await fetchApiStats();
+  }, [isWebsocket, websocketActiveSubscriptions, websocketConnection]);
 
   return { stats, fetchStats };
 };
