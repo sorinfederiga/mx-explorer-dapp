@@ -12,6 +12,7 @@ export const BlockHeightStatsCard = () => {
   const { refreshRate } = useSelector(activeNetworkSelector);
   const { unprocessed } = useSelector(statsSelector);
   const { blockHeight } = useSelector(pageHeadersBlocksStatsSelector);
+  const { blocks: statsBlocks } = unprocessed;
 
   const displayValue = useMemo(() => {
     const bNBlocks = new BigNumber(unprocessed?.blocks ?? 0);
@@ -25,7 +26,7 @@ export const BlockHeightStatsCard = () => {
     }
 
     return ELLIPSIS;
-  }, [blockHeight, unprocessed.blocks]);
+  }, [blockHeight, statsBlocks]);
 
   const isAnimated = Boolean(
     refreshRate && refreshRate < POOLING_REFRESH_RATE_LIMIT

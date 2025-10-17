@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { useSelector } from 'react-redux';
 
 import { REFRESH_RATE } from 'appConstants';
+import { getProgressStepInterval } from 'helpers';
 import { useFetchStats } from 'hooks';
 import {
   activeNetworkSelector,
@@ -10,58 +11,31 @@ import {
   statsSelector
 } from 'redux/selectors';
 
-const getStepInterval = (refreshInterval: number) => {
-  switch (refreshInterval) {
-    case 6000:
-      return new BigNumber(1000);
-    case 3000:
-      return new BigNumber(500);
-    case 2000:
-      return new BigNumber(500);
-    case 1000:
-      return new BigNumber(200);
-    case 600:
-      return new BigNumber(100);
-
-    default:
-      return new BigNumber(
-        new BigNumber(refreshInterval).isGreaterThan(1000)
-          ? new BigNumber(refreshInterval).minus(1000)
-          : refreshInterval
-      ).dividedBy(5);
-  }
-};
-
 export const useFetchEpochProgress = () => {
   const { fetchStats } = useFetchStats();
-
   const { timestamp } = useSelector(refreshSelector);
-  const { refreshRate: initialNetworkRefreshRate } = useSelector(
-    activeNetworkSelector
-  );
+  const { id: activeNetworkId, refreshRate: initialNetworkRefreshRate } =
+    useSelector(activeNetworkSelector);
+
   const { isDataReady, unprocessed, stats } = useSelector(statsSelector);
   const { epochPercentage, epochTimeRemaining } = stats;
   const { epoch, refreshRate, roundsPerEpoch, roundsPassed } = unprocessed;
-  const { id: activeNetworkId } = useSelector(activeNetworkSelector);
 
-  const pageHidden = document.hidden;
+  const [oldTestnetId, setOldTestnetId] = useState(activeNetworkId);
+  const [isNewState, setIsNewState] = useState<boolean>(true);
+  const [hasCallMade, setHasCallMade] = useState<boolean>(false);
+  const [epochRoundsLeft, setEpochRoundsLeft] = useState<number>(0);
 
   const refreshInterval =
     refreshRate || initialNetworkRefreshRate || REFRESH_RATE;
   const refreshIntervalSec = new BigNumber(refreshInterval).dividedBy(1000);
 
-  const stepInterval = getStepInterval(refreshInterval);
-
+  const stepInterval = getProgressStepInterval(refreshInterval);
   const stepProgressSec = stepInterval.dividedBy(1000);
 
-  const [oldTestnetId, setOldTestnetId] = useState(activeNetworkId);
   const [roundTimeProgress, setRoundTimeProgress] = useState(
     new BigNumber(stepProgressSec)
   );
-
-  const [isNewState, setIsNewState] = useState<boolean>(true);
-  const [hasCallMade, setHasCallMade] = useState<boolean>(false);
-  const [epochRoundsLeft, setEpochRoundsLeft] = useState<number>(0);
 
   const updateStats = () => {
     if (!refreshInterval) {
@@ -109,7 +83,7 @@ export const useFetchEpochProgress = () => {
       return;
     }
     const intervalRoundTime = setInterval(() => {
-      if (!pageHidden) {
+      if (!document.hidden) {
         setRoundTimeProgress((roundTimeProgress) =>
           roundTimeProgress.isEqualTo(refreshIntervalSec)
             ? new BigNumber(stepProgressSec)
@@ -128,15 +102,26 @@ export const useFetchEpochProgress = () => {
     if (refreshInterval && roundTimeProgress && timestamp) {
       updateStats();
     }
-  }, [timestamp, roundTimeProgress, refreshInterval]);
+  }, [
+    timestamp,
+    roundTimeProgress,
+    refreshInterval,
+    roundsPerEpoch,
+    roundsPassed
+  ]);
 
   const roundProgress = roundTimeProgress
     .times(100)
     .dividedBy(refreshIntervalSec ?? 1);
 
-  const roundsLeft = epochRoundsLeft
-    ? epochRoundsLeft
-    : roundsPerEpoch - roundsPassed + 1; // add one in order to take into account the css animation and the api call sync on the first run
+  const roundsLeft = useMemo(() => {
+    if (epochRoundsLeft) {
+      return epochRoundsLeft;
+    }
+
+    // add one in order to take into account the css animation and the api call sync on the first run
+    return new BigNumber(roundsPerEpoch).minus(roundsPassed).plus(1).toNumber();
+  }, [epochRoundsLeft, roundsPerEpoch, roundsPassed]);
 
   return {
     isReady: isDataReady,

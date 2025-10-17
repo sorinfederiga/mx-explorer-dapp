@@ -14,6 +14,7 @@ export * from './getOperationDirection';
 export * from './getPercentage';
 export * from './getPercentageFilled';
 export * from './getPrimaryColor';
+export * from './getProgressStepInterval';
 export * from './getProofHash';
 export * from './getStringPlural';
 export * from './getSubdomainNetwork';
