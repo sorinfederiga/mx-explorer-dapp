@@ -61,11 +61,7 @@ export function useRegisterWebsocketListener({
 
     if (!hasSubscription) {
       websocket.emit(subscription, websocketConfig, (response: any) => {
-        console.info(
-          `New Websocket Subscription ${subscription} with options`,
-          websocketConfig,
-          response
-        );
+        console.info(`New Websocket Subscription ${subscription}`);
         if (response?.status !== 'success') {
           websocketSubscriptions.delete(subscription);
           websocketPendingSubscriptions.delete(subscription);
