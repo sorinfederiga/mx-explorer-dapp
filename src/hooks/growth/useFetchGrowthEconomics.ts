@@ -1,41 +1,18 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { processGrowthEconomics } from 'helpers';
-import { useAdapter, useHasGrowthWidgets } from 'hooks';
-import { growthEconomicsSelector } from 'redux/selectors';
+import { useHasGrowthWidgets } from 'hooks';
 import { setGrowthEconomics } from 'redux/slices';
-
-let currentRequest: any = null;
+import { useFetchGrowthWidgetOnce } from './useFetchGrowthWidgetOnce';
 
 export const useFetchGrowthEconomics = () => {
-  const hasGrowthWidgets = useHasGrowthWidgets();
   const dispatch = useDispatch();
-  const { getGrowthWidget } = useAdapter();
-  const { isDataReady } = useSelector(growthEconomicsSelector);
-
-  const getGrowthEconomicsOnce = () => {
-    if (currentRequest) {
-      return currentRequest;
-    }
-
-    const requestPromise = new Promise(async (resolve, reject) => {
-      try {
-        const response = await getGrowthWidget('/economics');
-        resolve(response);
-      } catch (error) {
-        reject(error);
-      } finally {
-        currentRequest = null;
-      }
-    });
-
-    currentRequest = requestPromise;
-    return requestPromise;
-  };
+  const hasGrowthWidgets = useHasGrowthWidgets();
+  const fetchGrowthWidgetOnce = useFetchGrowthWidgetOnce();
 
   const fetchGrowthEconomics = async () => {
-    const { data, success } = await getGrowthEconomicsOnce();
+    const { data, success } = await fetchGrowthWidgetOnce('/economics');
 
     if (data && success) {
       const processedGrowthEconomics = processGrowthEconomics(data);
@@ -53,8 +30,12 @@ export const useFetchGrowthEconomics = () => {
   };
 
   useEffect(() => {
-    if (!isDataReady && hasGrowthWidgets) {
-      fetchGrowthEconomics();
+    if (!hasGrowthWidgets) {
+      return;
     }
-  }, []);
+
+    fetchGrowthEconomics();
+  }, [hasGrowthWidgets]);
+
+  return fetchGrowthEconomics;
 };
