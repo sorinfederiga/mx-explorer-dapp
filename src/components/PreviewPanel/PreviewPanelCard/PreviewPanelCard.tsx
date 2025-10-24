@@ -1,26 +1,29 @@
+import { ReactNode } from 'react';
 import classNames from 'classnames';
 
 import { WithClassnameType } from 'types';
 
-export interface PanelCardUIType extends WithClassnameType {
-  title?: React.ReactNode;
-  children?: React.ReactNode;
+export interface PreviewPanelCardUIType extends WithClassnameType {
+  title?: ReactNode;
+  children?: ReactNode;
   featured?: boolean;
 }
 
-export const PanelCard = ({
+export const PreviewPanelCard = ({
   title,
   children,
   featured,
   className
-}: PanelCardUIType) => {
+}: PreviewPanelCardUIType) => {
   if (!(title || children)) {
     return null;
   }
 
   return (
     <div
-      className={classNames('panel-card', className, { featured: featured })}
+      className={classNames('preview-panel-card', className, {
+        featured: featured
+      })}
     >
       {title && <dt>{title}</dt>}
       {children && <dd>{children}</dd>}

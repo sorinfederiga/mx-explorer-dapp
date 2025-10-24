@@ -1,4 +1,4 @@
-.panel-card {
+.preview-panel-card {
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
@@ -11,6 +11,7 @@
     font-family: var(--font-sans-serif);
     font-size: 0.875rem;
   }
+
   &.featured {
     --border-width: 2px;
     --border-style: solid;
@@ -28,11 +29,11 @@
 
   // custom displays
 
-  &.danger-zone {
+  &.border-warning {
     --border-color: var(--orange-400);
   }
 
-  .icon-dropped {
+  .icon-small {
     font-size: 0.75rem;
     margin-left: -0.25rem;
     margin-right: -0.25rem;
