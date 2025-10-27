@@ -1,5 +1,6 @@
 import { ReactNode, useState } from 'react';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { OverlayTriggerType } from 'react-bootstrap/esm/OverlayTrigger';
 
 import { Loader } from 'components';
 import { WithClassnameType, ApiAdapterResponseType } from 'types';
@@ -11,6 +12,9 @@ export interface PreviewPanelWrapperUIType extends WithClassnameType {
   onApiData: (response: any) => void;
   cachedPreviews: Record<string, any>;
   hash: string;
+  trigger?: OverlayTriggerType[];
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 export const PreviewPanelWrapper = ({
@@ -19,7 +23,10 @@ export const PreviewPanelWrapper = ({
   fetchData,
   onApiData,
   cachedPreviews = {},
-  hash = ''
+  hash = '',
+  trigger = ['click', 'hover'],
+  onMouseEnter,
+  onMouseLeave
 }: PreviewPanelWrapperUIType) => {
   const [show, setShow] = useState(false);
   const [dataReady, setDataReady] = useState<boolean | undefined>();
@@ -49,15 +56,21 @@ export const PreviewPanelWrapper = ({
 
   const handleOnMouseEnter = () => {
     setShow(true);
+    if (onMouseEnter) {
+      onMouseEnter();
+    }
   };
   const handleOnMouseLeave = () => {
     setShow(false);
+    if (onMouseLeave) {
+      onMouseLeave();
+    }
   };
 
   return (
     <OverlayTrigger
       key='popover'
-      trigger={['click', 'hover']}
+      trigger={trigger}
       placement='top'
       delay={{ show: 100, hide: 400 }}
       rootClose
@@ -68,7 +81,6 @@ export const PreviewPanelWrapper = ({
 
         fetchDetails();
       }}
-      show={show}
       overlay={
         <Popover
           id='popover-positioned-bottom'
@@ -83,6 +95,7 @@ export const PreviewPanelWrapper = ({
           )}
         </Popover>
       }
+      {...(trigger.includes('hover') ? { show: show } : {})}
     >
       <div onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
         {children}

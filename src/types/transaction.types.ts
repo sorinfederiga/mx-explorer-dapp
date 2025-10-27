@@ -306,6 +306,7 @@ export interface TransactionTableType {
   isDataReady?: boolean;
   inactiveFilters?: TransactionFiltersEnum[];
   hasPauseButton?: boolean;
+  hasTxPreviewBtn?: boolean;
 }
 
 export enum TransactionDirectionEnum {

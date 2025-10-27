@@ -26,6 +26,12 @@
       font-family: var(--font-headings-regular);
     }
   }
+  &.half-width {
+    width: 49.5%;
+  }
+  &.full-width {
+    width: 100%;
+  }
 
   // custom displays
 

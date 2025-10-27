@@ -7,12 +7,16 @@ export interface PreviewPanelCardUIType extends WithClassnameType {
   title?: ReactNode;
   children?: ReactNode;
   featured?: boolean;
+  fullWidth?: boolean;
+  halfWidth?: boolean;
 }
 
 export const PreviewPanelCard = ({
   title,
   children,
   featured,
+  fullWidth,
+  halfWidth,
   className
 }: PreviewPanelCardUIType) => {
   if (!(title || children)) {
@@ -22,7 +26,9 @@ export const PreviewPanelCard = ({
   return (
     <div
       className={classNames('preview-panel-card', className, {
-        featured: featured
+        featured: featured,
+        'full-width': fullWidth,
+        'half-width': halfWidth
       })}
     >
       {title && <dt>{title}</dt>}

@@ -21,7 +21,8 @@ export const Header = ({
   showDirectionCol = false,
   address,
   inactiveFilters,
-  hasPauseButton
+  hasPauseButton,
+  hasTxPreviewBtn
 }: TransactionTableType) => {
   const isSovereign = useIsSovereign();
   const { isRefreshPaused } = useSelector(transactionsSelector);
@@ -29,6 +30,7 @@ export const Header = ({
   return (
     <thead>
       <tr>
+        {hasTxPreviewBtn && <th scope='col'></th>}
         <th scope='col'>
           Txn Hash <StatusColumnFilters inactiveFilters={inactiveFilters} />
         </th>
