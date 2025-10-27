@@ -14,7 +14,7 @@ import {
 } from 'components';
 import { useIsSovereign } from 'hooks';
 import { transactionsSelector } from 'redux/selectors';
-import { pauseRefresh, resumeRefresh } from 'redux/slices/transactions';
+import { pauseTxRefresh, resumeTxRefresh } from 'redux/slices';
 import { TransactionTableType } from 'types';
 
 export const Header = ({
@@ -72,8 +72,8 @@ export const Header = ({
           </div>
           {hasPauseButton && (
             <PauseRefreshButton
-              pauseRefresh={pauseRefresh}
-              resumeRefresh={resumeRefresh}
+              pauseRefresh={pauseTxRefresh}
+              resumeRefresh={resumeTxRefresh}
               isRefreshPaused={isRefreshPaused}
             />
           )}

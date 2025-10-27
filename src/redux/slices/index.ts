@@ -1,5 +1,6 @@
 export * from './account';
 export * from './nodes';
+export * from './transactions';
 export * from './widgets';
 
 export * from './blocks';
@@ -19,5 +20,3 @@ export * from './stakeExtra';
 export * from './stats';
 export * from './token';
 export * from './tokenExtra';
-export * from './transactions';
-export * from './transactionsInPool';
