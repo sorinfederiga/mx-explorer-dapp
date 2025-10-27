@@ -56,13 +56,13 @@ export const PreviewPanelWrapper = ({
 
   const handleOnMouseEnter = () => {
     setShow(true);
-    if (onMouseEnter) {
+    if (onMouseEnter && trigger.includes('hover')) {
       onMouseEnter();
     }
   };
   const handleOnMouseLeave = () => {
     setShow(false);
-    if (onMouseLeave) {
+    if (onMouseLeave && trigger.includes('hover')) {
       onMouseLeave();
     }
   };
@@ -76,10 +76,16 @@ export const PreviewPanelWrapper = ({
       rootClose
       onToggle={(show) => {
         if (!show) {
+          if (onMouseLeave) {
+            onMouseLeave();
+          }
           return;
         }
 
         fetchDetails();
+        if (onMouseEnter) {
+          onMouseEnter();
+        }
       }}
       overlay={
         <Popover
