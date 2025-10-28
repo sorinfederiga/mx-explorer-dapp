@@ -20,15 +20,15 @@ export const NodeCell = ({ node, className }: NodeCellUIType) => {
   const { nodeDetails: stateNodeSetails } = useSelector(nodesOverviewSelector);
   const { getNode } = useAdapter();
 
+  const currentNode = stateNodeSetails?.[bls];
+
   return (
     <PreviewPanelWrapper
       hash={bls}
       fetchData={() => getNode(bls)}
       cachedPreviews={stateNodeSetails ?? {}}
       preview={
-        stateNodeSetails?.[bls] && (
-          <NodePanel node={stateNodeSetails[bls]} index={node.index} />
-        )
+        currentNode && <NodePanel node={currentNode} index={node.index} />
       }
       onApiData={(data) => {
         dispatch(addNodeDetails({ nodeDetails: data }));

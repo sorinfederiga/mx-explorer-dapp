@@ -27,6 +27,8 @@ export const TransactionPreview = ({
   const { transactionsDetails } = useSelector(transactionOverviewSelector);
   const { getTransaction } = useAdapter();
 
+  const currentTransaction = transactionsDetails?.[txHash];
+
   const handleOnMouseEnter = () => {
     dispatch(pauseTxRefresh());
   };
@@ -41,8 +43,8 @@ export const TransactionPreview = ({
       fetchData={() => getTransaction(txHash)}
       cachedPreviews={transactionsDetails ?? {}}
       preview={
-        transactionsDetails?.[txHash] && (
-          <TransactionPreviewPanel transaction={transactionsDetails[txHash]} />
+        currentTransaction && (
+          <TransactionPreviewPanel transaction={currentTransaction} />
         )
       }
       onApiData={(data) => {
