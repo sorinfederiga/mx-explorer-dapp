@@ -13,7 +13,7 @@
 }
 
 .preview-panel-wrapper {
-  --popover-max-width: 31.375rem; // 508px
+  --popover-max-width: 19rem; // 304px
   --popover-font-size: 0.75rem;
   --popover-bg: var(--neutral-800);
   --popover-border-color: var(--neutral-700);
@@ -32,6 +32,7 @@
     0px 101px 41px 0px rgba(0, 0, 0, 0.04), 0px 159px 44px 0px rgba(0, 0, 0, 0);
 
   @include media-breakpoint-up(md) {
+    --popover-max-width: 31.375rem; // 508px
     min-width: 31.375rem; // 508px;
   }
   font-family: var(--font-headings-regular);

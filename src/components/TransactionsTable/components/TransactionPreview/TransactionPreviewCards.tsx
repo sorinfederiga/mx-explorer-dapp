@@ -54,7 +54,12 @@ export const TransactionPreviewCards = ({
           <TxFrom transaction={transaction} showShard={false} />
         </PreviewPanelCard>
         <PreviewPanelCard title='To' halfWidth>
-          <TxTo transaction={transaction} showError={false} showShard={false} />
+          <TxTo
+            transaction={transaction}
+            showError={false}
+            showShard={false}
+            showContractlabel={false}
+          />
         </PreviewPanelCard>
         {receiver !== transaction.receiver && (
           <PreviewPanelCard title='Receiver' fullWidth>

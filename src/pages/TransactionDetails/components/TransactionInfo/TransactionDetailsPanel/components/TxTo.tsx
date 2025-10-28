@@ -7,17 +7,19 @@ interface TxToUIType {
   transaction: TransactionType;
   showError?: boolean;
   showShard?: boolean;
+  showContractlabel?: boolean;
 }
 
 export const TxTo = ({
   transaction,
   showError = true,
-  showShard = true
+  showShard = true,
+  showContractlabel = true
 }: TxToUIType) => {
   return (
     <div className='d-flex flex-column'>
       <div className='d-flex align-items-center'>
-        {isContract(transaction.receiver) && (
+        {showContractlabel && isContract(transaction.receiver) && (
           <span className='me-2 text-neutral-400'>Contract</span>
         )}
         <AccountLink

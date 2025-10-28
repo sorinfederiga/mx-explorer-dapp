@@ -27,7 +27,7 @@
     }
   }
   &.half-width {
-    width: 49.5%;
+    width: calc(50% - 0.125rem);
   }
   &.full-width {
     width: 100%;
