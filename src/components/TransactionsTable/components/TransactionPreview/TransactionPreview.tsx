@@ -41,7 +41,7 @@ export const TransactionPreview = ({
       fetchData={() => getTransaction(txHash)}
       cachedPreviews={transactionsDetails ?? {}}
       preview={
-        transactionsDetails && (
+        transactionsDetails?.[txHash] && (
           <TransactionPreviewPanel transaction={transactionsDetails[txHash]} />
         )
       }

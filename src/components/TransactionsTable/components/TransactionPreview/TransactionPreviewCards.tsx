@@ -58,7 +58,7 @@ export const TransactionPreviewCards = ({
             transaction={transaction}
             showError={false}
             showShard={false}
-            showContractlabel={false}
+            showContractLabel={false}
           />
         </PreviewPanelCard>
         {receiver !== transaction.receiver && (

@@ -20,7 +20,7 @@ export const TxAge = ({ transaction }: { transaction: TransactionType }) => {
       {isTxPending ? (
         <FontAwesomeIcon icon={faSpinner} className='me-2 fa-spin slow-spin' />
       ) : (
-        <FontAwesomeIcon icon={faClock} className='me-2 ' />
+        <FontAwesomeIcon icon={faClock} className='me-2' />
       )}
       <TimeAgo value={transaction.timestamp} />
       &nbsp;

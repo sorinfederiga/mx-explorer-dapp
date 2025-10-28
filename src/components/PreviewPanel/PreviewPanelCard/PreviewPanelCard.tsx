@@ -24,7 +24,7 @@ export const PreviewPanelCard = ({
   }
 
   return (
-    <div
+    <dl
       className={classNames('preview-panel-card', className, {
         featured: featured,
         'full-width': fullWidth,
@@ -33,6 +33,6 @@ export const PreviewPanelCard = ({
     >
       {title && <dt>{title}</dt>}
       {children && <dd>{children}</dd>}
-    </div>
+    </dl>
   );
 };

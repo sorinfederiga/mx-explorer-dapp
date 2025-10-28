@@ -26,7 +26,7 @@ export const NodeCell = ({ node, className }: NodeCellUIType) => {
       fetchData={() => getNode(bls)}
       cachedPreviews={stateNodeSetails ?? {}}
       preview={
-        stateNodeSetails && (
+        stateNodeSetails?.[bls] && (
           <NodePanel node={stateNodeSetails[bls]} index={node.index} />
         )
       }
