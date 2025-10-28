@@ -32,6 +32,8 @@ export const PreviewPanelWrapper = ({
   const [dataReady, setDataReady] = useState<boolean | undefined>();
   const [previewDetails, setPreviewDetails] = useState<any | undefined>();
 
+  const hasHoverTrigger = trigger.includes('hover');
+
   const fetchDetails = () => {
     if (!hash) {
       return;
@@ -56,13 +58,13 @@ export const PreviewPanelWrapper = ({
 
   const handleOnMouseEnter = () => {
     setShow(true);
-    if (onMouseEnter && trigger.includes('hover')) {
+    if (onMouseEnter && hasHoverTrigger) {
       onMouseEnter();
     }
   };
   const handleOnMouseLeave = () => {
     setShow(false);
-    if (onMouseLeave && trigger.includes('hover')) {
+    if (onMouseLeave && hasHoverTrigger) {
       onMouseLeave();
     }
   };
@@ -101,7 +103,7 @@ export const PreviewPanelWrapper = ({
           )}
         </Popover>
       }
-      {...(trigger.includes('hover') ? { show: show } : {})}
+      {...(hasHoverTrigger ? { show } : {})}
     >
       <div onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
         {children}
