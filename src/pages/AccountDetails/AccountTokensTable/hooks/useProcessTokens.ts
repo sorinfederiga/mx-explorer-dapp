@@ -76,7 +76,7 @@ export const useProcessTokens = (accountTokens: TokenType[]) => {
   const processedAccountTokens = useMemo(() => {
     const processedSortArray = accountTokens.map((token) => {
       const portofolioPercentage =
-        token.valueUsd && tokenBalance
+        token.valueUsd && tokenBalance && isValidAccountTokenValue(token)
           ? new BigNumber(token.valueUsd).dividedBy(tokenBalance).times(100)
           : new BigNumber(0);
       return { ...token, portofolioPercentage };
