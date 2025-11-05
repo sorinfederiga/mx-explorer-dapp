@@ -17,7 +17,7 @@ export const PriceSourceTooltip = ({
     <InfoTooltip
       title={
         <>
-          Price Source:
+          Self-Reported Price Source:
           <br />
           <ModalLink
             href={token.assets.priceSource.url}
