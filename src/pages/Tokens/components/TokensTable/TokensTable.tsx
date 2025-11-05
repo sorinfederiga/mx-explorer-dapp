@@ -107,8 +107,6 @@ export const TokensTable = ({
                           >
                             {token.ticker}
                           </NetworkLink>
-                          <LowLiquidityTooltip token={token} />
-                          <PriceSourceTooltip token={token} className='ms-0' />
                         </span>
                         {token.assets && token.assets.description && (
                           <div
@@ -124,11 +122,14 @@ export const TokensTable = ({
                   <td>{token.name}</td>
                   <td>
                     {token.price && (
-                      <FormatUSD
-                        value={token.price}
-                        usd={1}
-                        showPrefix={false}
-                      />
+                      <>
+                        <FormatUSD
+                          value={token.price}
+                          usd={1}
+                          showPrefix={false}
+                        />
+                        <PriceSourceTooltip token={token} />
+                      </>
                     )}
                   </td>
                   <td>
