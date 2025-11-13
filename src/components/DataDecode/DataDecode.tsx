@@ -6,7 +6,9 @@ import {
   useState
 } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 import { Anchor, Dropdown } from 'react-bootstrap';
+
 import { CopyButton } from 'components';
 import { faExclamationTriangle } from 'icons/regular';
 import {
@@ -78,11 +80,12 @@ export const DataDecode = ({
 
   return (
     <div
-      className={`position-relative data-decode mt-1 ${
-        hasOverflow ? '' : 'overflow-hidden'
-      }`}
+      className={classNames('position-relative data-decode mt-1', {
+        'overflow-hidden': !hasOverflow,
+        'has-decode': hasDecode
+      })}
     >
-      <div className={`form-control textarea ${className ? className : ''}`}>
+      <div className={classNames('form-control textarea', className)}>
         {anchoredContent ? anchoredContent : displayValue}
       </div>
       {value && value !== 'N/A' && (
