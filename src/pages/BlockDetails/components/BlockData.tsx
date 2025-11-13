@@ -286,7 +286,7 @@ export const BlockData = ({ block }: { block: UIBlockType }) => {
           </>
         )}
         {reservedText && (
-          <DetailItem title='Reserved'>
+          <DetailItem title='Data'>
             <div className='position-relative data-decode overflow-hidden mt-1'>
               <div className='form-control textarea textarea-lg'>
                 {reservedText}
