@@ -13,7 +13,8 @@ import {
   IdentityBlock,
   BlockGasUsed,
   Overlay,
-  ShardLink
+  ShardLink,
+  DataDecode
 } from 'components';
 import { formatDate, formatSize, urlBuilder } from 'helpers';
 import { useIsSovereign } from 'hooks';
@@ -278,6 +279,11 @@ export const BlockData = ({ block }: { block: UIBlockType }) => {
               </pre>
             </DetailItem>
           </>
+        )}
+        {block.reserved && (
+          <DetailItem title='Reserved'>
+            <DataDecode value={decodeHex(block.reserved)} hasDecode={false} />
+          </DetailItem>
         )}
       </div>
     </div>
